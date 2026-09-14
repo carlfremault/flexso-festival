@@ -1,0 +1,8 @@
+ID,date,status,artist_ID
+1,2024-06-30,available,1
+2,2024-07-01,available,1
+3,2024-02-08,available,2
+4,2024-03-10,unavailable,3
+5,2024-04-12,available,4
+6,2024-01-26,available,5
+7,2024-02-18,available,6

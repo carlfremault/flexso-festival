@@ -1,0 +1,28 @@
+# ADMIN SERVICE
+
+### Timeslots
+GET http://localhost:4004/admin/Timeslots
+
+###
+POST http://localhost:4004/admin/Timeslots
+Content-Type: application/json
+
+{
+    "name": "Happy Hour",
+    "date": "2026-09-14",
+    "startTime": "17:00:00",
+    "endTime": "18:00:00",
+    "event_ID": "1",
+    "artist_ID": "1",
+    "status": "requested"
+}
+###
+PATCH http://localhost:4004/admin/Timeslots(8c7cf658-70f0-442a-ad6e-e7204486c0e3)
+Content-Type: application/json
+
+{
+    "status": "confirmed"
+}
+###
+DELETE http://localhost:4004/admin/Timeslots(8c7cf658-70f0-442a-ad6e-e7204486c0e3)
+
