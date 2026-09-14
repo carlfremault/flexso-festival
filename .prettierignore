@@ -1,0 +1,8 @@
+node_modules/
+gen/
+_out/
+target/
+@cds-models/
+db/data/
+*.sqlite
+package-lock.json

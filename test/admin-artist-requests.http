@@ -1,0 +1,24 @@
+# ADMIN SERVICE
+
+### Artists
+GET http://localhost:4004/admin/Artists
+
+###
+POST http://localhost:4004/admin/Artists
+Content-Type: application/json
+
+{
+    "name": "Massive Attack",
+    "genre": "Electronic"
+}
+   
+###
+PATCH http://localhost:4004/admin/Artists(341b2006-d597-48c6-a7e9-1dd905e240f8)
+Content-Type: application/json
+
+{
+    "genre": "Trip Hop"
+}
+
+###
+DELETE http://localhost:4004/admin/Artists(341b2006-d597-48c6-a7e9-1dd905e240f8)
