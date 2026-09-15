@@ -1,0 +1,4 @@
+body {
+  background: var(--sapBackgroundColor);
+  color: var(--sapTextColor);
+}
