@@ -1,4 +1,10 @@
 body {
   background: var(--sapBackgroundColor);
   color: var(--sapTextColor);
+  margin: 0;
+  font-family: var(--sapFontFamily);
+}
+
+* {
+  box-sizing: border-box;
 }
