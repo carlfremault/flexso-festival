@@ -11,6 +11,7 @@
     "@types/node": "^24.0.0",
     "eslint": "^10.10.0",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-simple-import-sort": "^14.0.0",
     "prettier": "^3.9.6",
     "tsx": "^4",
     "typescript": "^6.0.0",
