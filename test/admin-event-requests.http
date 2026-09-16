@@ -20,7 +20,8 @@ Content-Type: application/json
 {
     "name": "Newer Event",
     "startDate": "2020-01-01",
-    "endDate": "2020-01-02"
+    "endDate": "2020-01-02",
+    "notes": "tbc"
 }
 
 ###

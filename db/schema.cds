@@ -9,6 +9,7 @@ entity Events : cuid, managed {
     name      : String;
     startDate : Date;
     endDate   : Date;
+    notes     : String;
     timeslots : Composition of many Timeslots
                     on timeslots.event = $self;
 }

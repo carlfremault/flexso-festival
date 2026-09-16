@@ -22,6 +22,7 @@ export default function EventsTable() {
   const columns = useMemo<AnalyticalTableColumnDefinition[]>(
     () => [
       { Header: "Name", accessor: "name", minWidth: 150 },
+      { Header: "Notes", accessor: "notes", minWidth: 150 },
       {
         Header: "Dates",
         accessor: (originalRow) => formatDateRange(originalRow.startDate, originalRow.endDate),
