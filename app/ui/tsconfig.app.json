@@ -9,6 +9,9 @@
     "skipLibCheck": true,
 
     "moduleResolution": "bundler",
+    "paths": {
+      "#cds-models/*": ["../../@cds-models/*"]
+    },
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",

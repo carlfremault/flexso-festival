@@ -6,12 +6,11 @@ using {
 namespace festival;
 
 entity Events : cuid, managed {
-    name        : String;
-    description : String;
-    startDate   : Date;
-    endDate     : Date;
-    timeslots   : Composition of many Timeslots
-                      on timeslots.event = $self;
+    name      : String;
+    startDate : Date;
+    endDate   : Date;
+    timeslots : Composition of many Timeslots
+                    on timeslots.event = $self;
 }
 
 type TimeSlotStatus     : String enum {
