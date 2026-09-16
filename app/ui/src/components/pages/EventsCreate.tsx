@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { Toolbar, ToolbarButton } from "@ui5/webcomponents-react";
+import { Bar, Button } from "@ui5/webcomponents-react";
 
 import EventForm from "../../features/events/components/EventForm";
 import PageWrapper from "../layout/PageWrapper";
@@ -13,11 +13,21 @@ export default function EventsCreate() {
   return (
     <PageWrapper
       title="New Event"
-      actionsBar={
-        <Toolbar design="Transparent">
-          <ToolbarButton design="Default" text="Cancel" onClick={handleCancelClick} />
-          <ToolbarButton design="Emphasized" text="Save" onClick={handleSaveClick} />
-        </Toolbar>
+      showFooter
+      footerArea={
+        <Bar
+          design="Footer"
+          endContent={
+            <>
+              <Button design="Transparent" onClick={() => navigate("/events")}>
+                Cancel
+              </Button>
+              <Button design="Emphasized" type="Submit">
+                Save
+              </Button>
+            </>
+          }
+        />
       }
     >
       <EventForm />

@@ -7,6 +7,7 @@ namespace festival;
 
 entity Events : cuid, managed {
     name      : String;
+    notes     : String;
     startDate : Date;
     endDate   : Date;
     timeslots : Composition of many Timeslots
