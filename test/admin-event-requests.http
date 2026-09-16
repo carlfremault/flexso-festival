@@ -1,7 +1,7 @@
 # ADMIN SERVICE
 
 ### Events
-GET http://localhost:4004/admin/Events
+GET http://localhost:4004/admin/Events?$expand=timeslots
 
 ###
 POST http://localhost:4004/admin/Events
@@ -9,7 +9,6 @@ Content-Type: application/json
 
 {
     "name": "New Event",
-    "description": "New Description",
     "startDate": "2020-01-01",
     "endDate": "2020-01-02"
 }
@@ -20,7 +19,6 @@ Content-Type: application/json
 
 {
     "name": "Newer Event",
-    "description": "New Description",
     "startDate": "2020-01-01",
     "endDate": "2020-01-02"
 }

@@ -1,8 +1,15 @@
+import { fileURLToPath, URL } from "node:url";
+
 import react from "@vitejs/plugin-react";
 import AdmZip from "adm-zip";
 import { defineConfig } from "vite";
 
 export default defineConfig({
+  resolve: {
+    alias: {
+      "#cds-models": fileURLToPath(new URL("../../@cds-models", import.meta.url)),
+    },
+  },
   plugins: [
     react(),
     {

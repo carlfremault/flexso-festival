@@ -1,7 +1,7 @@
-ID,name,description,startDate,endDate
-1,Summer Festival,Annual music and arts festival,2024-06-30,2024-07-01
-2,Jazz Night,Evening jazz performance series,2024-02-08,2024-02-08
-3,Rock Concert,Live rock band performance,2024-03-10,2024-03-10
-4,Electronic Rave,Dance and electronic music event,2024-04-12,2024-04-12
-5,Indie Showcase,Emerging artists showcase night,2024-01-26,2024-01-26
-6,Classical Evening,Symphony orchestra performance,2024-02-18,2024-02-18
+ID,name,startDate,endDate
+1,Summer Festival,2024-06-30,2024-07-01
+2,Jazz Night,2024-02-08,2024-02-08
+3,Rock Concert,2024-03-10,2024-03-10
+4,Electronic Rave,2024-04-12,2024-04-12
+5,Indie Showcase,2024-01-26,2024-01-26
+6,Classical Evening,2024-02-18,2024-02-18
