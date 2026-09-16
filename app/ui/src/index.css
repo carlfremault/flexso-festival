@@ -13,6 +13,8 @@ main {
   height: 100%;
 }
 
+/* Form elements overrides */
+
 ui5-form-group ui5-form-item {
   column-span: all;
 }
@@ -25,4 +27,10 @@ ui5-form-group ui5-form-item.calendar-form-item ui5-calendar {
   display: block;
   width: fit-content;
   margin-inline: auto;
+}
+
+/* Other */
+
+.field-error-text {
+  color: var(--sapNegativeColor);
 }

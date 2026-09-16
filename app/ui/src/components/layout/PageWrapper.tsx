@@ -13,12 +13,10 @@ interface PageWrapperProps {
   title: string;
   children: React.ReactNode;
   actionsBar?: React.ReactElement;
-  showFooter?: boolean;
-  footerArea?: React.ReactElement;
 }
 
 export default function PageWrapper(props: PageWrapperProps) {
-  const { children, title, actionsBar, footerArea, showFooter } = props;
+  const { children, title, actionsBar } = props;
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -55,8 +53,6 @@ export default function PageWrapper(props: PageWrapperProps) {
           heading={<Title level="H1">{title}</Title>}
         ></DynamicPageTitle>
       }
-      showFooter={showFooter}
-      footerArea={footerArea}
     >
       {children}
     </DynamicPage>
