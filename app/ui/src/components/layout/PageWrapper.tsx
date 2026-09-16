@@ -5,14 +5,19 @@ import {
   DynamicPage,
   DynamicPageTitle,
   Title,
-  Toolbar,
-  ToolbarButton,
 } from "@ui5/webcomponents-react";
 
-import EventsTable from "../../features/events/components/EventsTable";
 import { createNavClickHandler, toHref } from "../../utils/routerUtils";
 
-export default function Events() {
+interface PageWrapperProps {
+  title: string;
+  children: React.ReactNode;
+  actionsBar?: React.ReactElement;
+}
+
+export default function PageWrapper(props: PageWrapperProps) {
+  const { children, title, actionsBar } = props;
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -29,11 +34,7 @@ export default function Events() {
     <DynamicPage
       titleArea={
         <DynamicPageTitle
-          actionsBar={
-            <Toolbar design="Transparent">
-              <ToolbarButton design="Emphasized" text="New Event" />
-            </Toolbar>
-          }
+          actionsBar={actionsBar}
           breadcrumbs={
             <Breadcrumbs design="Standard" separators="Slash">
               {breadcrumbs.map((crumb) => (
@@ -49,11 +50,11 @@ export default function Events() {
               ))}
             </Breadcrumbs>
           }
-          heading={<Title level="H1">Events Overview</Title>}
+          heading={<Title level="H1">{title}</Title>}
         ></DynamicPageTitle>
       }
     >
-      <EventsTable />
+      {children}
     </DynamicPage>
   );
 }
