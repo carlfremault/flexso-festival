@@ -4,18 +4,16 @@ import {
   AnalyticalTable,
   type AnalyticalTableColumnDefinition,
   AnalyticalTableScaleWidthMode,
-  Bar,
   Button,
-  Dialog,
   FlexBox,
   IllustratedMessage,
-  MessageStrip,
-  Text,
 } from "@ui5/webcomponents-react";
 
 import { formatDateRange } from "../../../utils/dateUtils";
-import { useAllEvents, useDeleteEvent } from "../queries";
+import { useAllEvents } from "../queries";
 import type { PersistedEvent } from "../types";
+
+import { EventDeleteDialog } from "./EventDeleteDialog";
 
 import "@ui5/webcomponents-icons/dist/edit.js";
 import "@ui5/webcomponents-icons/dist/delete.js";
@@ -24,17 +22,13 @@ export default function EventsTable() {
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
 
   const { data: events } = useAllEvents();
-  const { mutate: deleteEvent, isPending, error: deleteError, reset } = useDeleteEvent();
 
   const handleSetDeleteTarget = (event: PersistedEvent) => {
-    reset();
     setDeleteTarget({ id: event.ID, name: event.name });
   };
 
-  const handleDeleteEvent = (id: string) => {
-    deleteEvent(id, {
-      onSuccess: () => setDeleteTarget(null),
-    });
+  const handleResetDeleteTarget = () => {
+    setDeleteTarget(null);
   };
 
   const columns = useMemo<AnalyticalTableColumnDefinition[]>(
@@ -81,49 +75,7 @@ export default function EventsTable() {
         )}
       />
       {deleteTarget && (
-        <Dialog
-          open={!!deleteTarget}
-          state="Negative"
-          headerText="Delete Event"
-          footer={
-            <Bar
-              design="Footer"
-              endContent={
-                <>
-                  <Button
-                    design="Transparent"
-                    onClick={() => {
-                      reset();
-                      setDeleteTarget(null);
-                    }}
-                    disabled={isPending}
-                  >
-                    Close
-                  </Button>
-                  <Button
-                    design="Negative"
-                    onClick={() => handleDeleteEvent(deleteTarget.id)}
-                    disabled={isPending}
-                  >
-                    Confirm
-                  </Button>
-                </>
-              }
-            />
-          }
-        >
-          <FlexBox direction="Column" gap={12}>
-            {deleteError && (
-              <MessageStrip design="Negative" hideCloseButton>
-                {deleteError.message}
-              </MessageStrip>
-            )}
-            <Text>
-              Are you sure you want to delete the event "{deleteTarget.name}
-              "?
-            </Text>
-          </FlexBox>
-        </Dialog>
+        <EventDeleteDialog deleteTarget={deleteTarget} onClose={handleResetDeleteTarget} />
       )}
     </>
   );
