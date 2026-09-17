@@ -32,7 +32,6 @@ export function useFormState<TValues extends Record<string, string | string[]>>(
   };
 
   const handleReset = () => {
-    setFormValues(initialValues);
     setFieldErrors({});
     setFormError(null);
     setIsDirty(false);

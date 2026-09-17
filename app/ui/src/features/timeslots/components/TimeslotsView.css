@@ -1,0 +1,4 @@
+.timeslots-panel::part(header) {
+  border-bottom: 0.0625rem solid var(--sapGroup_TitleBorderColor);
+  min-height: 3rem;
+}

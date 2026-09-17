@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router";
-import { Toolbar, ToolbarButton } from "@ui5/webcomponents-react";
+import { FlexBox, Toolbar, ToolbarButton } from "@ui5/webcomponents-react";
 
 import EventForm, { type EventFormHandle } from "../../features/events/components/EventForm";
 import { useEvent } from "../../features/events/queries";
+import TimeslotsView from "../../features/timeslots/components/TimeslotsView";
 import PageWrapper from "../layout/PageWrapper";
 
 export default function EventsEdit() {
@@ -37,14 +38,10 @@ function EventsEditView({ id }: { id: string }) {
         </Toolbar>
       }
     >
-      <EventForm
-        ref={formRef}
-        onSuccess={() => navigate("/events")}
-        event={event}
-        onStateChange={handleStateChange}
-      />
-      {/* TODO */}
-      <p>Timeslots here</p>
+      <FlexBox direction="Column" gap={16}>
+        <EventForm ref={formRef} event={event} onStateChange={handleStateChange} />
+        <TimeslotsView eventId={event.ID} />
+      </FlexBox>
     </PageWrapper>
   );
 }

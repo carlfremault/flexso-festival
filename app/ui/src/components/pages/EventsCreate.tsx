@@ -27,11 +27,7 @@ export default function EventsCreate() {
         </Toolbar>
       }
     >
-      <EventForm
-        ref={formRef}
-        onSuccess={() => navigate("/events")}
-        onStateChange={handleStateChange}
-      />
+      <EventForm ref={formRef} onStateChange={handleStateChange} />
     </PageWrapper>
   );
 }
