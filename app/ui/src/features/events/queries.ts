@@ -115,4 +115,28 @@ const useUpdateEvent = () => {
   });
 };
 
-export { useAllEvents, useEvent, useCreateEvent, useUpdateEvent };
+// -------------------------------
+// Delete event
+// -------------------------------
+const deleteEvent = async (id: string): Promise<void> => {
+  const res = await fetch(`/admin/Events(${id})`, {
+    method: "DELETE",
+  });
+
+  if (!res.ok) {
+    throw await parseODataError(res, `Failed to delete event (${res.status})`);
+  }
+};
+
+const useDeleteEvent = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteEvent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+    },
+  });
+};
+
+export { useAllEvents, useEvent, useCreateEvent, useUpdateEvent, useDeleteEvent };
