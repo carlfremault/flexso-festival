@@ -9,6 +9,7 @@ export function useFormState<TValues extends Record<string, string | string[]>>(
   const [formValues, setFormValues] = useState<TValues>(initialValues);
   const [fieldErrors, setFieldErrors] = useState<Partial<Record<keyof TValues, string>>>({});
   const [formError, setFormError] = useState<string | null>(null);
+  const [isDirty, setIsDirty] = useState(false);
 
   const handleFieldChange = <K extends keyof TValues & string>(fieldName: K, value: TValues[K]) => {
     setFormValues((current) => ({ ...current, [fieldName]: value }));
@@ -17,6 +18,7 @@ export function useFormState<TValues extends Record<string, string | string[]>>(
       return { ...current, [fieldName]: undefined };
     });
     setFormError(null);
+    setIsDirty(true);
   };
 
   const handleError = (error: Error) => {
@@ -29,6 +31,13 @@ export function useFormState<TValues extends Record<string, string | string[]>>(
     setFormError("Something went wrong. Please try again.");
   };
 
+  const handleReset = () => {
+    setFormValues(initialValues);
+    setFieldErrors({});
+    setFormError(null);
+    setIsDirty(false);
+  };
+
   return {
     formValues,
     fieldErrors,
@@ -37,5 +46,7 @@ export function useFormState<TValues extends Record<string, string | string[]>>(
     setFormError,
     handleFieldChange,
     handleError,
+    handleReset,
+    isDirty,
   };
 }

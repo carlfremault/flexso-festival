@@ -1,6 +1,6 @@
 import { Suspense, useRef } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import { QueryErrorResetBoundary } from "@tanstack/react-query";
 import {
   Button,
@@ -21,6 +21,7 @@ import "@ui5/webcomponents-icons-business-suite/dist/event.js";
 
 export default function Layout() {
   const navigationLayoutRef = useRef<NavigationLayoutDomRef>(null);
+  const location = useLocation();
 
   return (
     <NavigationLayout
@@ -33,6 +34,7 @@ export default function Layout() {
           {({ reset }) => (
             <ErrorBoundary
               onReset={reset}
+              resetKeys={[location.pathname]}
               fallbackRender={({ error, resetErrorBoundary }) => (
                 <FlexBox
                   direction="Column"

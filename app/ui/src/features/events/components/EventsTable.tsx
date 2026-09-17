@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { useNavigate } from "react-router";
 import {
   AnalyticalTable,
   type AnalyticalTableColumnDefinition,
@@ -65,10 +66,12 @@ export default function EventsTable() {
 }
 
 function RowActions({ row }: { row: Event }) {
+  const navigate = useNavigate();
+
   return (
     <FlexBox gap={12}>
       <Button
-        onClick={() => console.log(` navigating to /events/${row.ID}`)}
+        onClick={() => navigate(`/events/${row.ID}`)}
         icon="edit"
         accessibleName="Edit event"
         accessibleRole="Link"
