@@ -6,9 +6,9 @@ using {
 namespace festival;
 
 entity Events : cuid, managed {
-    name      : String;
-    startDate : Date;
-    endDate   : Date;
+    name      : String not null;
+    startDate : Date not null;
+    endDate   : Date not null;
     notes     : String;
     timeslots : Composition of many Timeslots
                     on timeslots.event = $self;

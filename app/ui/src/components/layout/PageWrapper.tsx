@@ -13,10 +13,11 @@ interface PageWrapperProps {
   title: string;
   children: React.ReactNode;
   actionsBar?: React.ReactElement;
+  currentBreadcrumb?: string;
 }
 
 export default function PageWrapper(props: PageWrapperProps) {
-  const { children, title, actionsBar } = props;
+  const { children, title, actionsBar, currentBreadcrumb } = props;
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -24,11 +25,17 @@ export default function PageWrapper(props: PageWrapperProps) {
   const breadcrumbs = location.pathname
     .split("/")
     .filter(Boolean)
-    .map((segment, idx, arr) => ({
-      label: segment.charAt(0).toUpperCase() + segment.slice(1),
-      path: "/" + arr.slice(0, idx + 1).join("/"),
-      isCurrent: idx === arr.length - 1,
-    }));
+    .map((segment, idx, arr) => {
+      const isCurrent = idx === arr.length - 1;
+      return {
+        label:
+          isCurrent && currentBreadcrumb
+            ? currentBreadcrumb
+            : segment.charAt(0).toUpperCase() + segment.slice(1),
+        path: "/" + arr.slice(0, idx + 1).join("/"),
+        isCurrent,
+      };
+    });
 
   return (
     <DynamicPage
