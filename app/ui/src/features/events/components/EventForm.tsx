@@ -1,4 +1,5 @@
 import { useEffect, useImperativeHandle } from "react";
+import { useNavigate } from "react-router";
 import type { CalendarSelectionChangeEventDetail } from "@ui5/webcomponents/dist/Calendar.js";
 import {
   Calendar,
@@ -15,11 +16,14 @@ import {
 
 import type { Event } from "#cds-models/AdminService";
 
+import { useToast } from "../../../components/layout/Toast";
 import FormField from "../../../components/ui/FormField";
 import { useFormState } from "../../../hooks/useFormState";
 import { type CdsDate, isCdsDate } from "../../../utils/dateUtils";
 import { useCreateEvent, useUpdateEvent } from "../queries";
 import type { PersistedEvent } from "../types";
+
+import "./EventForm.css";
 
 export interface EventFormHandle {
   submit: () => void;
@@ -39,14 +43,16 @@ const EVENT_FORM_FIELDS = Object.keys(getInitialValues()) as (keyof EventFieldEr
 
 interface EventFormProps {
   ref: React.Ref<EventFormHandle>;
-  onSuccess: () => void;
-  onStateChange?: (isFormDisabled: boolean) => void;
   event?: PersistedEvent;
+  onStateChange?: (isFormDisabled: boolean) => void;
 }
 
 export default function EventForm(props: EventFormProps) {
-  const { ref, onSuccess, onStateChange, event } = props;
+  const { ref, onStateChange, event } = props;
   const editMode = !!event;
+
+  const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const { mutate: createEvent, isPending: isCreating } = useCreateEvent();
   const { mutate: updateEvent, isPending: isUpdating } = useUpdateEvent();
@@ -74,13 +80,20 @@ export default function EventForm(props: EventFormProps) {
     handleFieldChange("endDate", e.detail.selectedValues[1]);
   };
 
-  const handleSuccess = () => {
+  const handleEditSuccess = () => {
+    showToast("Event updated!");
     handleReset();
-    onSuccess();
+  };
+
+  const handleCreateSuccess = (created: PersistedEvent) => {
+    showToast("Event created!");
+    handleReset();
+    navigate(`/events/${created.ID}`, { replace: true });
   };
 
   const handleSubmit = () => {
     const trimmedName = formValues.name.trim();
+    handleFieldChange("name", trimmedName);
     const errors: Partial<EventFieldErrors> = {};
 
     if (!trimmedName) errors.name = "Name is required";
@@ -102,10 +115,10 @@ export default function EventForm(props: EventFormProps) {
     if (editMode) {
       updateEvent(
         { id: event.ID, body: payload },
-        { onSuccess: handleSuccess, onError: handleError },
+        { onSuccess: handleEditSuccess, onError: handleError },
       );
     } else {
-      createEvent(payload, { onSuccess: handleSuccess, onError: handleError });
+      createEvent(payload, { onSuccess: handleCreateSuccess, onError: handleError });
     }
   };
 
@@ -120,7 +133,12 @@ export default function EventForm(props: EventFormProps) {
           {formError}
         </MessageStrip>
       )}
-      <Form headerText="Event details" labelSpan="S12 M12 L12 XL12" layout="S1 M2 L3 XL3">
+      <Form
+        className="event-form"
+        headerText="Event details"
+        labelSpan="S12 M12 L12 XL12"
+        layout="S1 M2 L3 XL3"
+      >
         <FormGroup colSpan="S1 M1 L1 XL1">
           <FormItem className="calendar-form-item">
             <Calendar
