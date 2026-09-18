@@ -21,10 +21,10 @@ type TimeslotStatus     : String enum {
 };
 
 entity Timeslots : cuid, managed {
-    name      : String;
-    date      : Date;
-    startTime : Time;
-    endTime   : Time;
+    name      : String not null;
+    date      : Date not null;
+    startTime : Time not null;
+    endTime   : Time not null;
     event     : Association to Events not null;
     artist    : Association to Artists;
     status    : TimeslotStatus default #open;

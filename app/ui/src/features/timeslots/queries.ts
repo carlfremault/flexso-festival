@@ -101,4 +101,29 @@ const useUpdateTimeslot = () => {
   });
 };
 
-export { useAllTimeslots, useCreateTimeslot, useUpdateTimeslot };
+// ---------------
+// Delete timeslot
+// ---------------
+const deleteTimeslot = async ({ id }: { id: string; eventId: string }): Promise<void> => {
+  const res = await fetch(`/admin/Timeslots(${id})`, {
+    method: "DELETE",
+  });
+
+  if (!res.ok) {
+    throw await parseODataError(res, `Failed to delete timeslot (${res.status})`);
+  }
+};
+
+const useDeleteTimeslot = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteTimeslot,
+    onSuccess: (_data, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["timeslots", variables.eventId] });
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+    },
+  });
+};
+
+export { useAllTimeslots, useCreateTimeslot, useUpdateTimeslot, useDeleteTimeslot };
