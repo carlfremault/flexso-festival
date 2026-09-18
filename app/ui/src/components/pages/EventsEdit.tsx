@@ -40,7 +40,7 @@ function EventsEditView({ id }: { id: string }) {
     >
       <FlexBox direction="Column" gap={16}>
         <EventForm ref={formRef} event={event} onStateChange={handleStateChange} />
-        <TimeslotsView eventId={event.ID} />
+        <TimeslotsView />
       </FlexBox>
     </PageWrapper>
   );

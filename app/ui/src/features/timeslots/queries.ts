@@ -1,6 +1,11 @@
-import { useSuspenseQuery, type UseSuspenseQueryResult } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+  type UseSuspenseQueryResult,
+} from "@tanstack/react-query";
 
-import type { Timeslots } from "#cds-models/AdminService";
+import type { Timeslot, Timeslots } from "#cds-models/AdminService";
 
 import { parseODataError } from "../../utils/parseODataError";
 
@@ -8,7 +13,9 @@ import { parseODataError } from "../../utils/parseODataError";
 // Fetch all timeslots belonging to an event
 // -----------------------------------------
 const fetchAllTimeslots = async (eventId: string): Promise<Timeslots> => {
-  const res = await fetch(`/admin/Timeslots?$expand=artist&$filter=event_ID eq ${eventId}`);
+  const res = await fetch(
+    `/admin/Timeslots?$expand=artist&$filter=event_ID eq ${eventId}&$orderby=date,startTime`,
+  );
   if (!res.ok) {
     throw await parseODataError(res, `Failed to load timeslots (${res.status})`);
   }
@@ -23,4 +30,35 @@ const useAllTimeslots = (eventId: string): UseSuspenseQueryResult<Timeslots> => 
   });
 };
 
-export { useAllTimeslots };
+// ---------------
+// Create timeslot
+// ---------------
+const createTimeslot = async (body: Timeslot): Promise<Timeslot> => {
+  const res = await fetch("/admin/Timeslots", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    throw await parseODataError(res, `Failed to create timeslot (${res.status})`);
+  }
+
+  return res.json();
+};
+
+const useCreateTimeslot = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: createTimeslot,
+    onSuccess: (created) => {
+      queryClient.invalidateQueries({ queryKey: ["timeslots", created.event_ID] });
+      queryClient.invalidateQueries({ queryKey: ["events", created.event_ID] });
+    },
+  });
+};
+
+export { useAllTimeslots, useCreateTimeslot };

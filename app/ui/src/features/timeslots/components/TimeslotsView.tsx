@@ -1,19 +1,14 @@
 import { memo, Suspense } from "react";
-import { Button, FlexBox, Panel, Title } from "@ui5/webcomponents-react";
+import { FlexBox, Panel, Title } from "@ui5/webcomponents-react";
 
 import CenteredBusyIndicator from "../../../components/ui/CenteredBusyIndicator";
 
+import TimeslotCreate from "./TimeslotCreate";
 import TimeslotsTable from "./TimeslotsTable";
 
 import "./TimeslotsView.css";
 
-interface TimeslotsViewProps {
-  eventId: string;
-}
-
-function TimeslotsView(props: TimeslotsViewProps) {
-  const { eventId } = props;
-
+function TimeslotsView() {
   return (
     <Panel
       className="timeslots-panel"
@@ -22,12 +17,12 @@ function TimeslotsView(props: TimeslotsViewProps) {
         <FlexBox alignItems="Center" fitContainer style={{ gap: "0.25rem" }}>
           <Title level="H2">Timeslots</Title>
           <span style={{ flexGrow: 1 }} />
-          <Button design="Emphasized">New Timeslot</Button>
+          <TimeslotCreate />
         </FlexBox>
       }
     >
       <Suspense fallback={<CenteredBusyIndicator />}>
-        <TimeslotsTable eventId={eventId} />
+        <TimeslotsTable />
       </Suspense>
     </Panel>
   );

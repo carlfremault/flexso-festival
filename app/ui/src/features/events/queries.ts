@@ -15,7 +15,7 @@ import type { PersistedEvent } from "./types";
 // Fetch all events
 // ----------------
 const fetchAllEvents = async (): Promise<Events> => {
-  const res = await fetch("/admin/Events?$expand=timeslots");
+  const res = await fetch("/admin/Events?$expand=timeslots&$orderby=startDate");
   if (!res.ok) {
     throw await parseODataError(res, `Failed to load events (${res.status})`);
   }
