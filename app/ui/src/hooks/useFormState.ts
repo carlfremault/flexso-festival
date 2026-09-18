@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { getFieldErrorsFromApiError } from "../utils/getFieldErrors";
+import { getFieldErrorsFromApiError } from "@/utils/getFieldErrors";
 
 export function useFormState<TValues extends Record<string, string | string[]>>(
   initialValues: TValues,

@@ -16,10 +16,11 @@ import {
 
 import type { Event } from "#cds-models/AdminService";
 
-import { useToast } from "../../../components/layout/Toast";
-import FormField from "../../../components/ui/FormField";
-import { useFormState } from "../../../hooks/useFormState";
-import { type CdsDate, isCdsDate } from "../../../utils/dateTimeUtils";
+import { useToast } from "@/components/layout/Toast";
+import FormField from "@/components/ui/FormField";
+import { useFormState } from "@/hooks/useFormState";
+import { type CdsDate, isCdsDate } from "@/utils/dateTimeUtils";
+
 import { useCreateEvent, useUpdateEvent } from "../queries";
 import type { PersistedEvent } from "../types";
 

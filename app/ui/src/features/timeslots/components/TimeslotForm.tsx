@@ -15,14 +15,15 @@ import {
 import type { Timeslot } from "#cds-models/AdminService";
 import type { TimeslotStatus } from "#cds-models/festival";
 
-import { useToast } from "../../../components/layout/Toast";
-import FormField from "../../../components/ui/FormField";
-import { useEventId } from "../../../hooks/useEventId";
-import { useFormState } from "../../../hooks/useFormState";
-import { capitalize } from "../../../utils/capitalize";
-import { type CdsDate, type CdsTime, isCdsDate, isCdsTime } from "../../../utils/dateTimeUtils";
-import { useAllArtists } from "../../artists/queries";
-import { useEvent } from "../../events/queries";
+import { useToast } from "@/components/layout/Toast";
+import FormField from "@/components/ui/FormField";
+import { useAllArtists } from "@/features/artists/queries";
+import { useEvent } from "@/features/events/queries";
+import { useEventId } from "@/hooks/useEventId";
+import { useFormState } from "@/hooks/useFormState";
+import { capitalize } from "@/utils/capitalize";
+import { type CdsDate, type CdsTime, isCdsDate, isCdsTime } from "@/utils/dateTimeUtils";
+
 import { useCreateTimeslot } from "../queries";
 
 import "./TimeslotForm.css";

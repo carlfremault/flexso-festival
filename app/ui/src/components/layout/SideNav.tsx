@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { SideNavigation, SideNavigationItem } from "@ui5/webcomponents-react";
 
-import { createNavClickHandler, toHref } from "../../utils/routerUtils";
+import { createNavClickHandler, toHref } from "@/utils/routerUtils";
 
 export default function SideNav() {
   const navigate = useNavigate();

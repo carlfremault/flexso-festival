@@ -2,7 +2,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 
 import type { Artists } from "#cds-models/AdminService";
 
-import { parseODataError } from "../../utils/parseODataError";
+import { parseODataError } from "@/utils/parseODataError";
 
 // -----------------
 // Fetch all artists

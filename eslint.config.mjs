@@ -46,13 +46,16 @@ export default tseslint.config(
             // 3. CAP internal aliases (#cds-models/*, @sap/cds)
             ["^#", "^@sap/"],
 
-            // 4. Parent imports (../)
+            // 4. Internal Aliases & Absolute imports
+            ["^@/"],
+
+            // 5. Parent imports (../)
             ["^\\.\\.(?!/?$)", "^\\.\\./?$"],
 
-            // 5. Relative imports (./)
+            // 6. Relative imports (./)
             ["^\\./(?=.*/)(?!/?$)", "^\\.(?!/?$)", "^\\./?$"],
 
-            // 6. Side effect & style imports
+            // 7. Side effect & style imports
             ["^\\u0000", "^.+\\.(css|scss|less)$"],
           ],
         },

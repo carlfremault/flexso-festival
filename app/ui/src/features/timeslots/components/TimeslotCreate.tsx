@@ -8,7 +8,7 @@ import {
   type DialogPropTypes,
 } from "@ui5/webcomponents-react";
 
-import { artistsQueryOptions } from "../../artists/queries";
+import { artistsQueryOptions } from "@/features/artists/queries";
 
 import TimeslotForm, { type TimeslotFormHandle } from "./TimeslotForm";
 
