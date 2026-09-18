@@ -24,7 +24,8 @@ import { useFormState } from "@/hooks/useFormState";
 import { capitalize } from "@/utils/capitalize";
 import { type CdsDate, type CdsTime, isCdsDate, isCdsTime } from "@/utils/dateTimeUtils";
 
-import { useCreateTimeslot } from "../queries";
+import { useCreateTimeslot, useUpdateTimeslot } from "../queries";
+import type { PersistedTimeslot } from "../types";
 
 import "./TimeslotForm.css";
 
@@ -51,11 +52,12 @@ interface TimeslotFormProps {
   ref: React.Ref<TimeslotFormHandle>;
   onClose: () => void;
   onStateChange: (isFormDisabled: boolean) => void;
-  timeslot?: Timeslot;
+  timeslot?: PersistedTimeslot;
 }
 
 export default function TimeslotForm(props: TimeslotFormProps) {
   const { ref, onClose, onStateChange, timeslot } = props;
+  const editMode = !!timeslot;
   const eventId = useEventId();
 
   // HOOKS
@@ -66,7 +68,8 @@ export default function TimeslotForm(props: TimeslotFormProps) {
   const { showToast } = useToast();
 
   const { mutate: createTimeslot, isPending: isCreating } = useCreateTimeslot();
-  const isPending = isCreating;
+  const { mutate: updateTimeslot, isPending: isUpdating } = useUpdateTimeslot();
+  const isPending = isCreating || isUpdating;
 
   const {
     formValues,
@@ -85,6 +88,12 @@ export default function TimeslotForm(props: TimeslotFormProps) {
   }, [isDirty, isPending]);
 
   // HANDLERS
+
+  const handleEditSuccess = () => {
+    showToast("Timeslot updated!");
+    handleReset();
+    onClose();
+  };
   const handleCreateSuccess = () => {
     showToast("Timeslot created!");
     handleReset();
@@ -111,12 +120,19 @@ export default function TimeslotForm(props: TimeslotFormProps) {
       date: showDate ? (formValues.date as CdsDate) : event.startDate,
       startTime: formValues.startTime as CdsTime,
       endTime: formValues.endTime as CdsTime,
-      event_ID: eventId,
       artist_ID: formValues.artist_ID || null,
+      event_ID: eventId,
       status: formValues.status as TimeslotStatus,
     };
 
-    createTimeslot(payload, { onSuccess: handleCreateSuccess, onError: handleError });
+    if (editMode) {
+      updateTimeslot(
+        { id: timeslot.ID, eventId, body: payload },
+        { onSuccess: handleEditSuccess, onError: handleError },
+      );
+    } else {
+      createTimeslot(payload, { onSuccess: handleCreateSuccess, onError: handleError });
+    }
   };
 
   useImperativeHandle(ref, () => ({

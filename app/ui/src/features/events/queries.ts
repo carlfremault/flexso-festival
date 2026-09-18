@@ -73,8 +73,8 @@ const useCreateEvent = () => {
 
   return useMutation({
     mutationFn: createEvent,
-    onSuccess: (created) => {
-      queryClient.setQueryData<Events>(["events"], (old) => (old ? [...old, created] : [created]));
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["events"] });
     },
   });
 };

@@ -96,7 +96,7 @@ function RowActions(props: RowActionsProps) {
       <Button
         onClick={() => navigate(`/events/${row.ID}`)}
         icon="edit"
-        accessibleName="Edit event"
+        accessibleName={`Edit event ${row.name}`}
         accessibleRole="Link"
         design="Transparent"
         tooltip="Edit event name, dates and manage timeslots"

@@ -9,6 +9,8 @@ import type { Timeslot, Timeslots } from "#cds-models/AdminService";
 
 import { parseODataError } from "../../utils/parseODataError";
 
+import type { PersistedTimeslot } from "./types";
+
 // -----------------------------------------
 // Fetch all timeslots belonging to an event
 // -----------------------------------------
@@ -54,11 +56,49 @@ const useCreateTimeslot = () => {
 
   return useMutation({
     mutationFn: createTimeslot,
-    onSuccess: (created) => {
-      queryClient.invalidateQueries({ queryKey: ["timeslots", created.event_ID] });
-      queryClient.invalidateQueries({ queryKey: ["events", created.event_ID] });
+    onSuccess: (_created, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["timeslots", variables.event_ID] });
+      queryClient.invalidateQueries({ queryKey: ["events"] });
     },
   });
 };
 
-export { useAllTimeslots, useCreateTimeslot };
+// ---------------
+// Update timeslot
+// ---------------
+const updateTimeslot = async ({
+  id,
+  body,
+}: {
+  id: string;
+  eventId: string;
+  body: Partial<PersistedTimeslot>;
+}): Promise<PersistedTimeslot> => {
+  const res = await fetch(`/admin/Timeslots(${id})`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!res.ok) {
+    throw await parseODataError(res, `Failed to edit timeslot (${res.status})`);
+  }
+
+  return res.json();
+};
+
+const useUpdateTimeslot = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateTimeslot,
+    onSuccess: (_updated, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["timeslots", variables.eventId] });
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+    },
+  });
+};
+
+export { useAllTimeslots, useCreateTimeslot, useUpdateTimeslot };

@@ -1,29 +1,50 @@
-import { memo, Suspense } from "react";
-import { FlexBox, Panel, Title } from "@ui5/webcomponents-react";
+import { memo, Suspense, useCallback, useState } from "react";
+import { Button, Panel, Title, Toolbar, ToolbarSpacer } from "@ui5/webcomponents-react";
 
 import CenteredBusyIndicator from "@/components/ui/CenteredBusyIndicator";
 
-import TimeslotCreate from "./TimeslotCreate";
+import type { PersistedTimeslot } from "../types";
+
+import TimeslotFormDialog from "./TimeslotFormDialog";
 import TimeslotsTable from "./TimeslotsTable";
 
 import "./TimeslotsView.css";
 
+type DialogState =
+  { mode: "create"; timeslot: null } | { mode: "edit"; timeslot: PersistedTimeslot } | null;
+
 function TimeslotsView() {
+  const [dialogState, setDialogState] = useState<DialogState>(null);
+
+  const handleEditTimeslot = useCallback((timeslot: PersistedTimeslot) => {
+    setDialogState({ mode: "edit", timeslot });
+  }, []);
+
   return (
     <Panel
       className="timeslots-panel"
       fixed
       header={
-        <FlexBox alignItems="Center" fitContainer style={{ gap: "0.25rem" }}>
+        <Toolbar design="Transparent">
           <Title level="H2">Timeslots</Title>
-          <span style={{ flexGrow: 1 }} />
-          <TimeslotCreate />
-        </FlexBox>
+          <ToolbarSpacer />
+          <Button
+            design="Emphasized"
+            onClick={() => setDialogState({ mode: "create", timeslot: null })}
+          >
+            New Timeslot
+          </Button>
+        </Toolbar>
       }
     >
       <Suspense fallback={<CenteredBusyIndicator />}>
-        <TimeslotsTable />
+        <TimeslotsTable onEdit={handleEditTimeslot} />
       </Suspense>
+      <TimeslotFormDialog
+        open={dialogState !== null}
+        timeslot={dialogState?.timeslot ?? undefined}
+        onClose={() => setDialogState(null)}
+      />
     </Panel>
   );
 }
