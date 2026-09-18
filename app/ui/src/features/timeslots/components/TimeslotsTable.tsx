@@ -9,7 +9,6 @@ import {
   ObjectStatus,
 } from "@ui5/webcomponents-react";
 
-import type { Timeslot } from "#cds-models/AdminService";
 import type { TimeslotStatus } from "#cds-models/festival";
 
 import { useEvent } from "@/features/events/queries";
@@ -18,6 +17,7 @@ import { capitalize } from "@/utils/capitalize";
 import { formatDate } from "@/utils/dateTimeUtils";
 
 import { useAllTimeslots } from "../queries";
+import type { PersistedTimeslot } from "../types";
 
 import "@ui5/webcomponents-icons/dist/edit.js";
 import "@ui5/webcomponents-icons/dist/delete.js";
@@ -29,7 +29,13 @@ const STATUS_STATE: Record<TimeslotStatus, "Positive" | "Negative" | "Informatio
   open: "Negative",
 };
 
-export default function TimeslotsTable() {
+interface TimeslotsTableProps {
+  onEdit: (timeslot: PersistedTimeslot) => void;
+}
+
+export default function TimeslotsTable(props: TimeslotsTableProps) {
+  const { onEdit } = props;
+
   const eventId = useEventId();
   const { data: event } = useEvent(eventId);
   const { data: timeslots } = useAllTimeslots(eventId);
@@ -71,11 +77,11 @@ export default function TimeslotsTable() {
         Header: "Actions",
         disableSortBy: true,
         minWidth: 100,
-        Cell: ({ row }) => <RowActions row={row.original} />,
+        Cell: ({ row }) => <RowActions row={row.original} onEdit={onEdit} />,
         hAlign: "Center",
       },
     ],
-    [showDate],
+    [showDate, onEdit],
   );
 
   return (
@@ -99,18 +105,19 @@ export default function TimeslotsTable() {
 }
 
 interface RowActionsProps {
-  row: Timeslot;
+  row: PersistedTimeslot;
+  onEdit: (timeslot: PersistedTimeslot) => void;
 }
 
 function RowActions(props: RowActionsProps) {
-  const { row } = props;
+  const { row, onEdit } = props;
 
   return (
     <FlexBox gap={12}>
       <Button
-        onClick={() => console.log(` editing timeslot with id ${row.ID}`)}
+        onClick={() => onEdit(row)}
         icon="edit"
-        accessibleName="Edit timeslot"
+        accessibleName={`Edit timeslot ${row.name}`}
         design="Transparent"
         tooltip="Edit timeslot name, time, artist and status"
       />
