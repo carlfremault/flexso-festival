@@ -9,7 +9,7 @@ import {
   IllustratedMessage,
 } from "@ui5/webcomponents-react";
 
-import { formatDateRange } from "../../../utils/dateUtils";
+import { formatDateRange } from "../../../utils/dateTimeUtils";
 import { useAllEvents } from "../queries";
 import type { PersistedEvent } from "../types";
 

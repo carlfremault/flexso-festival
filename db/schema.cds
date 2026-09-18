@@ -14,7 +14,7 @@ entity Events : cuid, managed {
                     on timeslots.event = $self;
 }
 
-type TimeSlotStatus     : String enum {
+type TimeslotStatus     : String enum {
     open;
     confirmed;
     requested
@@ -27,7 +27,7 @@ entity Timeslots : cuid, managed {
     endTime   : Time;
     event     : Association to Events not null;
     artist    : Association to Artists;
-    status    : TimeSlotStatus default #open;
+    status    : TimeslotStatus default #open;
 }
 
 entity Artists : cuid, managed {

@@ -19,7 +19,7 @@ import type { Event } from "#cds-models/AdminService";
 import { useToast } from "../../../components/layout/Toast";
 import FormField from "../../../components/ui/FormField";
 import { useFormState } from "../../../hooks/useFormState";
-import { type CdsDate, isCdsDate } from "../../../utils/dateUtils";
+import { type CdsDate, isCdsDate } from "../../../utils/dateTimeUtils";
 import { useCreateEvent, useUpdateEvent } from "../queries";
 import type { PersistedEvent } from "../types";
 
@@ -43,14 +43,15 @@ const EVENT_FORM_FIELDS = Object.keys(getInitialValues()) as (keyof EventFieldEr
 
 interface EventFormProps {
   ref: React.Ref<EventFormHandle>;
+  onStateChange: (isFormDisabled: boolean) => void;
   event?: PersistedEvent;
-  onStateChange?: (isFormDisabled: boolean) => void;
 }
 
 export default function EventForm(props: EventFormProps) {
   const { ref, onStateChange, event } = props;
   const editMode = !!event;
 
+  // HOOKS
   const navigate = useNavigate();
   const { showToast } = useToast();
 
@@ -71,9 +72,10 @@ export default function EventForm(props: EventFormProps) {
 
   useEffect(() => {
     const isFormDisabled = !isDirty || isPending;
-    onStateChange?.(isFormDisabled);
+    onStateChange(isFormDisabled);
   }, [isDirty, isPending]);
 
+  // HANDLERS
   const handleChangeDateRange = (e: CustomEvent<CalendarSelectionChangeEventDetail>) => {
     e.preventDefault();
     handleFieldChange("startDate", e.detail.selectedValues[0]);
@@ -129,7 +131,7 @@ export default function EventForm(props: EventFormProps) {
   return (
     <>
       {formError && (
-        <MessageStrip design="Negative" hideCloseButton>
+        <MessageStrip design="Negative" role="alert" hideCloseButton>
           {formError}
         </MessageStrip>
       )}

@@ -21,6 +21,7 @@ export function EventDeleteDialog(props: EventDeleteDialogProps) {
   return (
     <Dialog
       open={!!deleteTarget}
+      onClose={onClose}
       state="Negative"
       headerText="Delete Event"
       footer={
