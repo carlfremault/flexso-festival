@@ -2,7 +2,8 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { Toolbar, ToolbarButton } from "@ui5/webcomponents-react";
 
-import EventForm, { type EventFormHandle } from "../../features/events/components/EventForm";
+import EventForm, { type EventFormHandle } from "@/features/events/components/EventForm";
+
 import PageWrapper from "../layout/PageWrapper";
 
 export default function EventsCreate() {

@@ -1,7 +1,7 @@
 import { memo, Suspense } from "react";
 import { FlexBox, Panel, Title } from "@ui5/webcomponents-react";
 
-import CenteredBusyIndicator from "../../../components/ui/CenteredBusyIndicator";
+import CenteredBusyIndicator from "@/components/ui/CenteredBusyIndicator";
 
 import TimeslotCreate from "./TimeslotCreate";
 import TimeslotsTable from "./TimeslotsTable";

@@ -7,7 +7,7 @@ import {
   Title,
 } from "@ui5/webcomponents-react";
 
-import { createNavClickHandler, toHref } from "../../utils/routerUtils";
+import { createNavClickHandler, toHref } from "@/utils/routerUtils";
 
 interface PageWrapperProps {
   title: string;

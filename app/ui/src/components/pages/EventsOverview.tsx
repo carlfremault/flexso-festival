@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router";
 import { Toolbar, ToolbarButton } from "@ui5/webcomponents-react";
 
-import EventsTable from "../../features/events/components/EventsTable";
+import EventsTable from "@/features/events/components/EventsTable";
+
 import PageWrapper from "../layout/PageWrapper";
 
 export default function EventsOverview() {

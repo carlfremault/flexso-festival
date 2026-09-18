@@ -10,7 +10,8 @@
 
     "moduleResolution": "bundler",
     "paths": {
-      "#cds-models/*": ["../../@cds-models/*"]
+      "#cds-models/*": ["../../@cds-models/*"],
+      "@/*": ["./src/*"]
     },
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,

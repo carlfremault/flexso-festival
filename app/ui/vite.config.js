@@ -8,6 +8,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "#cds-models": fileURLToPath(new URL("../../@cds-models", import.meta.url)),
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
   plugins: [

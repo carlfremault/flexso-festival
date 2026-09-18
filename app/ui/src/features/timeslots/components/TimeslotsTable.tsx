@@ -12,10 +12,11 @@ import {
 import type { Timeslot } from "#cds-models/AdminService";
 import type { TimeslotStatus } from "#cds-models/festival";
 
-import { useEventId } from "../../../hooks/useEventId";
-import { capitalize } from "../../../utils/capitalize";
-import { formatDate } from "../../../utils/dateTimeUtils";
-import { useEvent } from "../../events/queries";
+import { useEvent } from "@/features/events/queries";
+import { useEventId } from "@/hooks/useEventId";
+import { capitalize } from "@/utils/capitalize";
+import { formatDate } from "@/utils/dateTimeUtils";
+
 import { useAllTimeslots } from "../queries";
 
 import "@ui5/webcomponents-icons/dist/edit.js";
