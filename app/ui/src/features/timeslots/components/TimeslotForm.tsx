@@ -88,7 +88,6 @@ export default function TimeslotForm(props: TimeslotFormProps) {
   }, [isDirty, isPending]);
 
   // HANDLERS
-
   const handleEditSuccess = () => {
     showToast("Timeslot updated!");
     handleReset();

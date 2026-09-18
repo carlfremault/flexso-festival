@@ -2,28 +2,29 @@ import { Bar, Button, Dialog, FlexBox, MessageStrip, Text } from "@ui5/webcompon
 
 import { useToast } from "@/components/layout/Toast";
 
-import { useDeleteEvent } from "../queries";
+import { useDeleteTimeslot } from "../queries";
 
-interface EventDeleteDialogProps {
+interface TimeslotDeleteDialogProps {
   open: boolean;
   deleteTarget: { id: string; name: string } | null;
+  eventId: string;
   onClose: () => void;
 }
 
-export function EventDeleteDialog(props: EventDeleteDialogProps) {
-  const { open, deleteTarget, onClose } = props;
+export function TimeslotDeleteDialog(props: TimeslotDeleteDialogProps) {
+  const { open, deleteTarget, eventId, onClose } = props;
 
   const { showToast } = useToast();
-  const { mutate: deleteEvent, isPending, error: deleteError, reset } = useDeleteEvent();
+  const { mutate: deleteTimeslot, isPending, error: deleteError, reset } = useDeleteTimeslot();
 
   const handleSuccess = () => {
-    showToast("Event deleted!");
+    showToast("Timeslot deleted!");
     onClose();
   };
 
-  const handleDeleteEvent = () => {
+  const handleDeleteTimeslot = () => {
     if (!deleteTarget) return;
-    deleteEvent(deleteTarget.id, { onSuccess: handleSuccess });
+    deleteTimeslot({ id: deleteTarget.id, eventId }, { onSuccess: handleSuccess });
   };
 
   const handleClose = () => {
@@ -36,13 +37,13 @@ export function EventDeleteDialog(props: EventDeleteDialogProps) {
       open={open}
       onClose={handleClose}
       state="Negative"
-      headerText="Delete Event"
+      headerText="Delete Timeslot"
       footer={
         <Bar
           design="Footer"
           endContent={
             <>
-              <Button design="Negative" onClick={handleDeleteEvent} loading={isPending}>
+              <Button design="Negative" onClick={handleDeleteTimeslot} loading={isPending}>
                 Delete
               </Button>
               <Button design="Transparent" onClick={handleClose}>
@@ -59,7 +60,7 @@ export function EventDeleteDialog(props: EventDeleteDialogProps) {
             {deleteError.message}
           </MessageStrip>
         )}
-        <Text>Are you sure you want to delete the event "{deleteTarget?.name}"?</Text>
+        <Text>Are you sure you want to delete the timeslot "{deleteTarget?.name}"?</Text>
       </FlexBox>
     </Dialog>
   );

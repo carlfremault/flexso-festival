@@ -75,9 +75,11 @@ export default function EventsTable() {
           />
         )}
       />
-      {deleteTarget && (
-        <EventDeleteDialog deleteTarget={deleteTarget} onClose={handleResetDeleteTarget} />
-      )}
+      <EventDeleteDialog
+        open={!!deleteTarget}
+        deleteTarget={deleteTarget}
+        onClose={handleResetDeleteTarget}
+      />
     </>
   );
 }
@@ -105,7 +107,7 @@ function RowActions(props: RowActionsProps) {
         onClick={() => onDeleteClick(row)}
         icon="delete"
         design="Transparent"
-        accessibleName="Delete event"
+        accessibleName={`Delete event ${row.name}`}
         tooltip="Delete event"
       />
     </FlexBox>
