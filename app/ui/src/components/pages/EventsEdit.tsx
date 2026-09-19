@@ -4,6 +4,7 @@ import { FlexBox, Toolbar, ToolbarButton } from "@ui5/webcomponents-react";
 
 import EventForm, { type EventFormHandle } from "@/features/events/components/EventForm";
 import { useEvent } from "@/features/events/queries";
+import { TimeslotsRescheduleAlert } from "@/features/timeslots/components/TimeslotsRescheduleAlert";
 import TimeslotsView from "@/features/timeslots/components/TimeslotsView";
 
 import PageWrapper from "../layout/PageWrapper";
@@ -41,6 +42,7 @@ function EventsEditView({ id }: { id: string }) {
     >
       <FlexBox direction="Column" gap={16}>
         <EventForm ref={formRef} event={event} onStateChange={handleStateChange} />
+        <TimeslotsRescheduleAlert eventId={id} />
         <TimeslotsView />
       </FlexBox>
     </PageWrapper>

@@ -5,31 +5,22 @@ import {
   AnalyticalTableScaleWidthMode,
   Button,
   FlexBox,
+  Icon,
   IllustratedMessage,
-  ObjectStatus,
 } from "@ui5/webcomponents-react";
 
-import type { TimeslotStatus } from "#cds-models/festival";
-
-import { useEvent } from "@/features/events/queries";
 import { useEventId } from "@/hooks/useEventId";
-import { capitalize } from "@/utils/capitalize";
 import { formatDate } from "@/utils/dateTimeUtils";
 
 import { useAllTimeslots } from "../queries";
 import type { PersistedTimeslot } from "../types";
 
 import { TimeslotDeleteDialog } from "./TimeslotDeleteDialog";
+import { TimeslotStatusBadge } from "./TimeslotStatusBadge";
 
 import "@ui5/webcomponents-icons/dist/edit.js";
 import "@ui5/webcomponents-icons/dist/delete.js";
-import "./TimeslotsTable.css";
-
-const STATUS_STATE: Record<TimeslotStatus, "Positive" | "Negative" | "Information"> = {
-  confirmed: "Positive",
-  requested: "Information",
-  open: "Negative",
-};
+import "@ui5/webcomponents-icons/dist/alert.js";
 
 interface TimeslotsTableProps {
   onEdit: (timeslot: PersistedTimeslot) => void;
@@ -40,9 +31,7 @@ export default function TimeslotsTable(props: TimeslotsTableProps) {
   const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
 
   const eventId = useEventId();
-  const { data: event } = useEvent(eventId);
   const { data: timeslots } = useAllTimeslots(eventId);
-  const showDate = event.startDate !== event.endDate;
 
   const handleSetDeleteTarget = (timeslot: PersistedTimeslot) => {
     setDeleteTarget({ id: timeslot.ID, name: timeslot.name });
@@ -55,32 +44,28 @@ export default function TimeslotsTable(props: TimeslotsTableProps) {
   const columns = useMemo<AnalyticalTableColumnDefinition[]>(
     () => [
       { Header: "Name", accessor: "name", minWidth: 150 },
-      ...(showDate
-        ? [
-            {
-              Header: "Date",
-              accessor: "date",
-              Cell: ({ value }) => formatDate(value),
-              minWidth: 100,
-              hAlign: "Center",
-            } as AnalyticalTableColumnDefinition,
-          ]
-        : []),
+      {
+        Header: "Date",
+        accessor: "date",
+        Cell: ({ value }) => formatDate(value),
+        minWidth: 150,
+        hAlign: "Center",
+      } as AnalyticalTableColumnDefinition,
       { Header: "Start", accessor: "startTime", minWidth: 80, hAlign: "Center" },
       { Header: "End", accessor: "endTime", minWidth: 80, hAlign: "Center" },
       { Header: "Artist", accessor: "artist.name", minWidth: 150 },
       {
         Header: "Status",
         accessor: "status",
-        minWidth: 100,
-        Cell: ({ value }) => {
-          const status = value as TimeslotStatus;
-          return (
-            <ObjectStatus className="timeslot-status" state={STATUS_STATE[status]} showDefaultIcon>
-              {capitalize(status)}
-            </ObjectStatus>
-          );
-        },
+        minWidth: 150,
+        Cell: ({ value, row }) => (
+          <FlexBox alignItems="Center" justifyContent="Center" style={{ gap: "0.5rem" }}>
+            <TimeslotStatusBadge status={value} />
+            {row.original.needsRescheduling && (
+              <Icon name="alert" design="Critical" accessibleName="Falls outside the event dates" />
+            )}
+          </FlexBox>
+        ),
         hAlign: "Center",
       },
       {
@@ -94,7 +79,7 @@ export default function TimeslotsTable(props: TimeslotsTableProps) {
         hAlign: "Center",
       },
     ],
-    [showDate, onEdit],
+    [onEdit],
   );
 
   return (

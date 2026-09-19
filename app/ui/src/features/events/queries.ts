@@ -7,6 +7,8 @@ import {
 
 import type { Event, Events } from "#cds-models/AdminService";
 
+import { parseSapMessages, type SapMessage } from "@/utils/parseSapMessages";
+
 import { parseODataError } from "../../utils/parseODataError";
 
 import type { PersistedEvent } from "./types";
@@ -82,13 +84,16 @@ const useCreateEvent = () => {
 // ------------
 // Update event
 // ------------
+
+type UpdateEventResult = { data: PersistedEvent; messages: SapMessage[] };
+
 const updateEvent = async ({
   id,
   body,
 }: {
   id: string;
   body: Partial<PersistedEvent>;
-}): Promise<PersistedEvent> => {
+}): Promise<UpdateEventResult> => {
   const res = await fetch(`/admin/Events(${id})`, {
     method: "PATCH",
     headers: {
@@ -101,16 +106,18 @@ const updateEvent = async ({
     throw await parseODataError(res, `Failed to edit event (${res.status})`);
   }
 
-  return res.json();
+  return { data: await res.json(), messages: parseSapMessages(res) };
 };
 
 const useUpdateEvent = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
+    mutationKey: ["updateEvent"],
     mutationFn: updateEvent,
-    onSuccess: () => {
+    onSuccess: (_updated, variables) => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
+      queryClient.invalidateQueries({ queryKey: ["timeslots", variables.id] });
     },
   });
 };
@@ -139,4 +146,11 @@ const useDeleteEvent = () => {
   });
 };
 
-export { useAllEvents, useEvent, useCreateEvent, useUpdateEvent, useDeleteEvent };
+export {
+  useAllEvents,
+  useEvent,
+  useCreateEvent,
+  useUpdateEvent,
+  useDeleteEvent,
+  type UpdateEventResult,
+};
