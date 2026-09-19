@@ -45,21 +45,7 @@
         }
       },
       "[production]": {
-        "auth": {
-          "kind": "mocked",
-          "users": {
-            "admin": {
-              "roles": [
-                "admin"
-              ]
-            },
-            "user": {
-              "roles": [
-                "authenticated-user"
-              ]
-            }
-          }
-        }
+        "auth": "xsuaa"
       }
     }
   }
