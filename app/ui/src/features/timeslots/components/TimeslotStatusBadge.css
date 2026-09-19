@@ -1,0 +1,3 @@
+.timeslot-status [data-component-name="ObjectStatusIconContainer"] {
+  margin-inline-end: var(--sapContent_Space_Tiny);
+}

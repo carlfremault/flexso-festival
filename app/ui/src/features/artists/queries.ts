@@ -8,7 +8,7 @@ import { parseODataError } from "@/utils/parseODataError";
 // Fetch all artists
 // -----------------
 const fetchAllArtists = async (): Promise<Artists> => {
-  const res = await fetch("/admin/Artists");
+  const res = await fetch("/admin/Artists?$orderby=name");
   if (!res.ok) {
     throw await parseODataError(res, `Failed to load artists (${res.status})`);
   }

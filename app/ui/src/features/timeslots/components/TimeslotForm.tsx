@@ -7,7 +7,7 @@ import {
   FormGroup,
   Input,
   MessageStrip,
-  Option,
+  OptionCustom,
   Select,
   TimePicker,
 } from "@ui5/webcomponents-react";
@@ -21,11 +21,13 @@ import { useAllArtists } from "@/features/artists/queries";
 import { useEvent } from "@/features/events/queries";
 import { useEventId } from "@/hooks/useEventId";
 import { useFormState } from "@/hooks/useFormState";
-import { capitalize } from "@/utils/capitalize";
 import { type CdsDate, type CdsTime, isCdsDate, isCdsTime } from "@/utils/dateTimeUtils";
 
 import { useCreateTimeslot, useUpdateTimeslot } from "../queries";
+import { isTimeslotStatus, TIMESLOT_STATUS_CONFIG, TIMESLOT_STATUS_OPTIONS } from "../timeslots";
 import type { PersistedTimeslot } from "../types";
+
+import { TimeslotStatusBadge } from "./TimeslotStatusBadge";
 
 import "./TimeslotForm.css";
 
@@ -46,7 +48,6 @@ function getInitialValues(timeslot?: Timeslot) {
 
 type TimeslotFieldErrors = Partial<Record<keyof ReturnType<typeof getInitialValues>, string>>;
 const TIMESLOT_FORM_FIELDS = Object.keys(getInitialValues()) as (keyof TimeslotFieldErrors)[];
-const TIMESLOT_STATUS_OPTIONS: TimeslotStatus[] = ["open", "confirmed", "requested"];
 
 interface TimeslotFormProps {
   ref: React.Ref<TimeslotFormHandle>;
@@ -63,7 +64,6 @@ export default function TimeslotForm(props: TimeslotFormProps) {
   // HOOKS
   const { data: artists } = useAllArtists();
   const { data: event } = useEvent(eventId);
-  const showDate = event.startDate !== event.endDate;
 
   const { showToast } = useToast();
 
@@ -105,7 +105,7 @@ export default function TimeslotForm(props: TimeslotFormProps) {
     const errors: Partial<TimeslotFieldErrors> = {};
 
     if (!trimmedName) errors.name = "Name is required";
-    if (showDate && !isCdsDate(formValues.date)) errors.date = "Date is required";
+    if (!isCdsDate(formValues.date)) errors.date = "Date is required";
     if (!isCdsTime(formValues.startTime)) errors.startTime = "Start time is required";
     if (!isCdsTime(formValues.endTime)) errors.endTime = "End time is required";
 
@@ -116,7 +116,7 @@ export default function TimeslotForm(props: TimeslotFormProps) {
 
     const payload = {
       name: trimmedName,
-      date: showDate ? (formValues.date as CdsDate) : event.startDate,
+      date: formValues.date as CdsDate,
       startTime: formValues.startTime as CdsTime,
       endTime: formValues.endTime as CdsTime,
       artist_ID: formValues.artist_ID || null,
@@ -159,27 +159,20 @@ export default function TimeslotForm(props: TimeslotFormProps) {
               style={{ width: "100%" }}
             />
           </FormField>
-          {showDate && (
-            <FormField
-              required={showDate}
-              label="Date"
-              error={fieldErrors.date}
-              errorId="date-error"
-            >
-              <DatePicker
-                required={showDate}
-                value={formValues.date}
-                valueFormat="yyyy-MM-dd"
-                displayFormat="medium"
-                onChange={(e) => handleFieldChange("date", e.target.value)}
-                valueState={fieldErrors.date ? "Negative" : "None"}
-                valueStateMessage={<span>{fieldErrors.date}</span>}
-                accessibleDescriptionRef={fieldErrors.date ? "date-error" : undefined}
-                minDate={event.startDate}
-                maxDate={event.endDate}
-              />
-            </FormField>
-          )}
+          <FormField required label="Date" error={fieldErrors.date} errorId="date-error">
+            <DatePicker
+              required
+              value={formValues.date}
+              valueFormat="yyyy-MM-dd"
+              displayFormat="medium"
+              onChange={(e) => handleFieldChange("date", e.target.value)}
+              valueState={fieldErrors.date ? "Negative" : "None"}
+              valueStateMessage={<span>{fieldErrors.date}</span>}
+              accessibleDescriptionRef={fieldErrors.date ? "date-error" : undefined}
+              minDate={event.startDate}
+              maxDate={event.endDate}
+            />
+          </FormField>
           <FormField
             required
             label="Start time"
@@ -233,18 +226,23 @@ export default function TimeslotForm(props: TimeslotFormProps) {
           <FormField label="Status" error={fieldErrors.status} errorId="status-error">
             <Select
               className="timeslot-form-select"
-              value={formValues.status}
-              onChange={(e) =>
-                handleFieldChange("status", e.detail.selectedOption.value as TimeslotStatus)
-              }
+              onChange={(e) => {
+                const value = e.detail.selectedOption.value;
+                if (isTimeslotStatus(value)) handleFieldChange("status", value);
+              }}
               valueState={fieldErrors.status ? "Negative" : "None"}
               valueStateMessage={<span>{fieldErrors.status}</span>}
               accessibleDescriptionRef={fieldErrors.status ? "status-error" : undefined}
             >
-              {TIMESLOT_STATUS_OPTIONS.map((statusOption) => (
-                <Option key={statusOption} value={statusOption}>
-                  {capitalize(statusOption)}
-                </Option>
+              {TIMESLOT_STATUS_OPTIONS.map((key) => (
+                <OptionCustom
+                  key={key}
+                  value={key}
+                  displayText={TIMESLOT_STATUS_CONFIG[key].label}
+                  selected={key === formValues.status}
+                >
+                  <TimeslotStatusBadge status={key} />
+                </OptionCustom>
               ))}
             </Select>
           </FormField>
