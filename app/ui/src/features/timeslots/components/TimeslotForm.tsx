@@ -18,12 +18,12 @@ import type { TimeslotStatus } from "#cds-models/festival";
 import { useToast } from "@/components/layout/Toast";
 import FormField from "@/components/ui/FormField";
 import { useAllArtists } from "@/features/artists/queries";
-import { useEvent } from "@/features/events/queries";
+import { useEvent } from "@/features/events/adminQueries";
 import { useEventId } from "@/hooks/useEventId";
 import { useFormState } from "@/hooks/useFormState";
 import { type CdsDate, type CdsTime, isCdsDate, isCdsTime } from "@/utils/dateTimeUtils";
 
-import { useCreateTimeslot, useUpdateTimeslot } from "../queries";
+import { useCreateTimeslot, useUpdateTimeslot } from "../adminQueries";
 import { isTimeslotStatus, TIMESLOT_STATUS_CONFIG, TIMESLOT_STATUS_OPTIONS } from "../timeslots";
 import type { PersistedTimeslot } from "../types";
 

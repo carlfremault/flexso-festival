@@ -2,7 +2,7 @@ import { Bar, Button, Dialog, FlexBox, MessageStrip, Text } from "@ui5/webcompon
 
 import { useToast } from "@/components/layout/Toast";
 
-import { useDeleteTimeslot } from "../queries";
+import { useDeleteTimeslot } from "../adminQueries";
 
 interface TimeslotDeleteDialogProps {
   open: boolean;

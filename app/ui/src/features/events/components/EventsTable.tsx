@@ -11,7 +11,7 @@ import {
 
 import { formatDateRange } from "@/utils/dateTimeUtils";
 
-import { useAllEvents } from "../queries";
+import { useAllEvents } from "../adminQueries";
 import type { PersistedEvent } from "../types";
 
 import { EventDeleteDialog } from "./EventDeleteDialog";

@@ -2,22 +2,22 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 
 import type { Artists } from "#cds-models/AdminService";
 
-import { parseODataError } from "@/utils/parseODataError";
+import { apiFetch } from "@/utils/apiFetch";
 
 // -----------------
 // Fetch all artists
 // -----------------
-const fetchAllArtists = async (): Promise<Artists> => {
-  const res = await fetch("/admin/Artists?$orderby=name");
-  if (!res.ok) {
-    throw await parseODataError(res, `Failed to load artists (${res.status})`);
-  }
-  const { value } = await res.json();
-  return value;
-};
+const fetchAllArtists = async (): Promise<Artists> =>
+  (
+    await apiFetch<{ value: Artists }>({
+      service: "admin",
+      path: "/Artists?$orderby=name",
+      errorMessage: "Failed to load artists",
+    })
+  ).value;
 
 const artistsQueryOptions = queryOptions({
-  queryKey: ["artists"],
+  queryKey: ["admin", "artists"],
   queryFn: fetchAllArtists,
 });
 
