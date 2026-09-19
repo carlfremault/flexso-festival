@@ -13,7 +13,7 @@ import { useEventId } from "@/hooks/useEventId";
 import { formatDate } from "@/utils/dateTimeUtils";
 
 import { useAllTimeslots } from "../adminQueries";
-import type { PersistedTimeslot } from "../types";
+import type { PersistedAdminTimeslot } from "../types";
 
 import { TimeslotDeleteDialog } from "./TimeslotDeleteDialog";
 import { TimeslotStatusBadge } from "./TimeslotStatusBadge";
@@ -23,7 +23,7 @@ import "@ui5/webcomponents-icons/dist/delete.js";
 import "@ui5/webcomponents-icons/dist/alert.js";
 
 interface TimeslotsTableProps {
-  onEdit: (timeslot: PersistedTimeslot) => void;
+  onEdit: (timeslot: PersistedAdminTimeslot) => void;
 }
 
 export default function TimeslotsTable(props: TimeslotsTableProps) {
@@ -33,7 +33,7 @@ export default function TimeslotsTable(props: TimeslotsTableProps) {
   const eventId = useEventId();
   const { data: timeslots } = useAllTimeslots(eventId);
 
-  const handleSetDeleteTarget = (timeslot: PersistedTimeslot) => {
+  const handleSetDeleteTarget = (timeslot: PersistedAdminTimeslot) => {
     setDeleteTarget({ id: timeslot.ID, name: timeslot.name });
   };
 
@@ -111,9 +111,9 @@ export default function TimeslotsTable(props: TimeslotsTableProps) {
 }
 
 interface RowActionsProps {
-  row: PersistedTimeslot;
-  onEdit: (row: PersistedTimeslot) => void;
-  onDeleteClick: (row: PersistedTimeslot) => void;
+  row: PersistedAdminTimeslot;
+  onEdit: (row: PersistedAdminTimeslot) => void;
+  onDeleteClick: (row: PersistedAdminTimeslot) => void;
 }
 
 function RowActions(props: RowActionsProps) {

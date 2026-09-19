@@ -5,25 +5,25 @@ import {
   type UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 
-import type { Timeslot, Timeslots } from "#cds-models/AdminService";
+import type { Timeslot } from "#cds-models/AdminService";
 
 import { apiFetch } from "@/utils/apiFetch";
 
-import type { PersistedTimeslot } from "./types";
+import type { PersistedAdminTimeslot } from "./types";
 
 // -----------------------------------------
 // Fetch all timeslots belonging to an event
 // -----------------------------------------
-const fetchAllTimeslots = async (eventId: string): Promise<Timeslots> =>
+const fetchAllTimeslots = async (eventId: string): Promise<PersistedAdminTimeslot[]> =>
   (
-    await apiFetch<{ value: Timeslots }>({
+    await apiFetch<{ value: PersistedAdminTimeslot[] }>({
       service: "admin",
       path: `/Timeslots?$expand=artist&$filter=event_ID eq ${eventId}&$orderby=date,startTime`,
       errorMessage: "Failed to load timeslots",
     })
   ).value;
 
-const useAllTimeslots = (eventId: string): UseSuspenseQueryResult<Timeslots> => {
+const useAllTimeslots = (eventId: string): UseSuspenseQueryResult<PersistedAdminTimeslot[]> => {
   return useSuspenseQuery({
     queryKey: ["admin", "timeslots", eventId],
     queryFn: () => fetchAllTimeslots(eventId),
@@ -33,7 +33,7 @@ const useAllTimeslots = (eventId: string): UseSuspenseQueryResult<Timeslots> => 
 // ---------------
 // Create timeslot
 // ---------------
-const createTimeslot = async (body: Timeslot): Promise<PersistedTimeslot> =>
+const createTimeslot = async (body: Timeslot): Promise<PersistedAdminTimeslot> =>
   apiFetch({
     service: "admin",
     path: "/Timeslots",
@@ -68,8 +68,8 @@ const updateTimeslot = async ({
 }: {
   id: string;
   eventId: string;
-  body: Partial<PersistedTimeslot>;
-}): Promise<PersistedTimeslot> =>
+  body: Partial<PersistedAdminTimeslot>;
+}): Promise<PersistedAdminTimeslot> =>
   apiFetch({
     service: "admin",
     path: `/Timeslots/${id}`,

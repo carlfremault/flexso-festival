@@ -5,26 +5,26 @@ import {
   type UseSuspenseQueryResult,
 } from "@tanstack/react-query";
 
-import type { Event, Events } from "#cds-models/AdminService";
+import type { Event } from "#cds-models/AdminService";
 
 import { apiFetch, apiFetchWithMessages } from "@/utils/apiFetch";
 import { type SapMessage } from "@/utils/parseSapMessages";
 
-import type { PersistedEvent } from "./types";
+import type { PersistedAdminEvent } from "./types";
 
 // ----------------
 // Fetch all events
 // ----------------
-const fetchAllEvents = async (): Promise<Events> =>
+const fetchAllEvents = async (): Promise<PersistedAdminEvent[]> =>
   (
-    await apiFetch<{ value: Events }>({
+    await apiFetch<{ value: PersistedAdminEvent[] }>({
       service: "admin",
       path: `/Events?$expand=timeslots&$orderby=startDate`,
       errorMessage: "Failed to load events",
     })
   ).value;
 
-const useAllEvents = (): UseSuspenseQueryResult<Events> => {
+const useAllEvents = (): UseSuspenseQueryResult<PersistedAdminEvent[]> => {
   return useSuspenseQuery({
     queryKey: ["admin", "events"],
     queryFn: fetchAllEvents,
@@ -34,14 +34,14 @@ const useAllEvents = (): UseSuspenseQueryResult<Events> => {
 // ------------------
 // Fetch single event
 // ------------------
-const fetchEvent = async (id: string): Promise<PersistedEvent> =>
+const fetchEvent = async (id: string): Promise<PersistedAdminEvent> =>
   apiFetch({
     service: "admin",
     path: `/Events/${id}?$expand=timeslots`,
     errorMessage: `Failed to load event ${id}`,
   });
 
-const useEvent = (id: string): UseSuspenseQueryResult<PersistedEvent> => {
+const useEvent = (id: string): UseSuspenseQueryResult<PersistedAdminEvent> => {
   return useSuspenseQuery({
     queryKey: ["admin", "events", id],
     queryFn: () => fetchEvent(id),
@@ -51,7 +51,7 @@ const useEvent = (id: string): UseSuspenseQueryResult<PersistedEvent> => {
 // ------------
 // Create event
 // ------------
-const createEvent = async (body: Event): Promise<PersistedEvent> =>
+const createEvent = async (body: Event): Promise<PersistedAdminEvent> =>
   apiFetch({
     service: "admin",
     path: "/Events",
@@ -79,14 +79,14 @@ const useCreateEvent = () => {
 // ------------
 // Update event
 // ------------
-type UpdateEventResult = { data: PersistedEvent; messages: SapMessage[] };
+type UpdateEventResult = { data: PersistedAdminEvent; messages: SapMessage[] };
 
 const updateEvent = async ({
   id,
   body,
 }: {
   id: string;
-  body: Partial<PersistedEvent>;
+  body: Partial<PersistedAdminEvent>;
 }): Promise<UpdateEventResult> =>
   apiFetchWithMessages({
     service: "admin",

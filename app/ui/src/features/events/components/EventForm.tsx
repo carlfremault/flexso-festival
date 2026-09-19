@@ -22,7 +22,7 @@ import { useFormState } from "@/hooks/useFormState";
 import { type CdsDate, isCdsDate } from "@/utils/dateTimeUtils";
 
 import { useCreateEvent, useUpdateEvent } from "../adminQueries";
-import type { PersistedEvent } from "../types";
+import type { PersistedAdminEvent } from "../types";
 
 import "./EventForm.css";
 
@@ -45,7 +45,7 @@ const EVENT_FORM_FIELDS = Object.keys(getInitialValues()) as (keyof EventFieldEr
 interface EventFormProps {
   ref: React.Ref<EventFormHandle>;
   onStateChange: (isFormDisabled: boolean) => void;
-  event?: PersistedEvent;
+  event?: PersistedAdminEvent;
 }
 
 export default function EventForm(props: EventFormProps) {
@@ -88,7 +88,7 @@ export default function EventForm(props: EventFormProps) {
     handleReset();
   };
 
-  const handleCreateSuccess = (created: PersistedEvent) => {
+  const handleCreateSuccess = (created: PersistedAdminEvent) => {
     showToast("Event created!");
     handleReset();
     navigate(`/events/${created.ID}`, { replace: true });
