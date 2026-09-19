@@ -12,7 +12,8 @@
     "paths": {
       "@sap/cds": ["./node_modules/@cap-js/cds-types"],
       "#cds-models/*": ["./@cds-models/*"]
-    }
+    },
+    "rootDir": "."
   },
   "exclude": ["node_modules", "app"]
 }

@@ -9,13 +9,17 @@ export class AdminService extends cds.ApplicationService {
     // -----------------------------------------------------------------------------
     this.before("UPDATE", Events, async (req) => {
       const { ID, startDate, endDate } = req.data;
+      if (startDate === undefined && endDate === undefined) return;
 
       const event = await SELECT.one.from(Events).columns("startDate", "endDate").where({ ID });
       if (!event) return;
-      if (startDate === event.startDate && endDate === event.endDate) return;
+
+      const newStart = startDate ?? event.startDate;
+      const newEnd = endDate ?? event.endDate;
+      if (newStart === event.startDate && newEnd === event.endDate) return;
 
       const timeslots = await SELECT.from(Timeslots)
-        .where`event_ID = ${ID} and (date < ${startDate} or date > ${endDate})`;
+        .where`event_ID = ${ID} and (date < ${newStart} or date > ${newEnd})`;
 
       if (timeslots.length) {
         req.warn({
