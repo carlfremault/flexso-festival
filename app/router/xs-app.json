@@ -1,9 +1,24 @@
 {
+  "welcomeFile": "/ui/index.html",
+  "authenticationMethod": "route",
   "routes": [
+    {
+      "source": "^/ui/(.*\\..*)$",
+      "target": "/flexsofestival/$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa"
+    },
+    {
+      "source": "^/ui(/.*)?$",
+      "target": "/flexsofestival/index.html",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa"
+    },
     {
       "source": "^/(.*)$",
       "target": "$1",
       "destination": "srv-api",
+      "authenticationType": "xsuaa",
       "csrfProtection": true
     }
   ]
