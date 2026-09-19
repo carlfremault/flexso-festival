@@ -22,3 +22,6 @@ mta_archives/
 
 # Production test file (which has production url)
 test/production.http
+
+# ui build
+app/ui/dist

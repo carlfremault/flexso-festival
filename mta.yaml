@@ -4,6 +4,7 @@ version: 1.0.0
 description: "A simple CAP project."
 parameters:
   enable-parallel-deployments: true
+  deploy_mode: html5-repo
 build-parameters:
   before-all:
     - builder: custom
@@ -49,11 +50,43 @@ modules:
           url: ~{srv-url}
           forwardAuthToken: true
       - name: flexso-festival-auth
+      - name: flexso-festival-html5-runtime
     provides:
       - name: app-api
         properties:
           app-protocol: ${protocol}
           app-uri: ${default-uri}
+
+  - name: flexso-festival-app-deployer
+    type: com.sap.application.content
+    path: gen
+    build-parameters:
+      build-result: app/
+      requires:
+        - name: flexsofestivalui
+          artifacts:
+            - ui.zip
+          target-path: app/
+    requires:
+      - name: flexso-festival-auth
+      - name: srv-api
+      - name: flexso-festival-html5-repo-host
+        parameters:
+          content-target: true
+          config:
+            HTML5Runtime_enabled: true
+
+  - name: flexsofestivalui
+    type: html5
+    path: app/ui
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm ci
+        - npm run build
+      supported-platforms:
+        []
 
 resources:
   - name: flexso-festival-auth
@@ -78,3 +111,14 @@ resources:
     parameters:
       service: hana
       service-plan: hdi-shared
+
+  - name: flexso-festival-html5-repo-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+  - name: flexso-festival-html5-runtime
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-runtime
