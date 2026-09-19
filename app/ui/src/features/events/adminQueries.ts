@@ -15,7 +15,6 @@ import type { PersistedEvent } from "./types";
 // ----------------
 // Fetch all events
 // ----------------
-
 const fetchAllEvents = async (): Promise<Events> =>
   (
     await apiFetch<{ value: Events }>({
@@ -80,7 +79,6 @@ const useCreateEvent = () => {
 // ------------
 // Update event
 // ------------
-
 type UpdateEventResult = { data: PersistedEvent; messages: SapMessage[] };
 
 const updateEvent = async ({
