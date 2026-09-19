@@ -25,7 +25,7 @@ import { type CdsDate, type CdsTime, isCdsDate, isCdsTime } from "@/utils/dateTi
 
 import { useCreateTimeslot, useUpdateTimeslot } from "../adminQueries";
 import { isTimeslotStatus, TIMESLOT_STATUS_CONFIG, TIMESLOT_STATUS_OPTIONS } from "../timeslots";
-import type { PersistedTimeslot } from "../types";
+import type { PersistedAdminTimeslot } from "../types";
 
 import { TimeslotStatusBadge } from "./TimeslotStatusBadge";
 
@@ -53,7 +53,7 @@ interface TimeslotFormProps {
   ref: React.Ref<TimeslotFormHandle>;
   onClose: () => void;
   onStateChange: (isFormDisabled: boolean) => void;
-  timeslot?: PersistedTimeslot;
+  timeslot?: PersistedAdminTimeslot;
 }
 
 export default function TimeslotForm(props: TimeslotFormProps) {

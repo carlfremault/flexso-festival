@@ -12,7 +12,7 @@ import {
 import { formatDateRange } from "@/utils/dateTimeUtils";
 
 import { useAllEvents } from "../adminQueries";
-import type { PersistedEvent } from "../types";
+import type { PersistedUserEvent } from "../types";
 
 import { EventDeleteDialog } from "./EventDeleteDialog";
 
@@ -24,7 +24,7 @@ export default function EventsTable() {
 
   const { data: events } = useAllEvents();
 
-  const handleSetDeleteTarget = (event: PersistedEvent) => {
+  const handleSetDeleteTarget = (event: PersistedUserEvent) => {
     setDeleteTarget({ id: event.ID, name: event.name });
   };
 
@@ -85,8 +85,8 @@ export default function EventsTable() {
 }
 
 interface RowActionsProps {
-  row: PersistedEvent;
-  onDeleteClick: (row: PersistedEvent) => void;
+  row: PersistedUserEvent;
+  onDeleteClick: (row: PersistedUserEvent) => void;
 }
 function RowActions(props: RowActionsProps) {
   const { row, onDeleteClick } = props;

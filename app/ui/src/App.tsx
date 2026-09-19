@@ -4,6 +4,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { ToastProvider } from "@/components/layout/Toast";
 import AppRoutes from "@/routes";
 
+import { UserProvider } from "./components/layout/UserProvider";
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -16,10 +18,12 @@ const queryClient = new QueryClient({
 export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <ToastProvider>
-        <AppRoutes />
-      </ToastProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
+      <UserProvider>
+        <ToastProvider>
+          <AppRoutes />
+        </ToastProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </UserProvider>
     </QueryClientProvider>
   );
 }

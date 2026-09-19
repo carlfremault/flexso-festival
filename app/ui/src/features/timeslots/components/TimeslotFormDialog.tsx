@@ -11,14 +11,14 @@ import {
 import CenteredBusyIndicator from "@/components/ui/CenteredBusyIndicator";
 import { artistsQueryOptions } from "@/features/artists/queries";
 
-import type { PersistedTimeslot } from "../types";
+import type { PersistedAdminTimeslot } from "../types";
 
 import TimeslotForm, { type TimeslotFormHandle } from "./TimeslotForm";
 
 interface TimeslotFormDialogProps {
   open: boolean;
   onClose: () => void;
-  timeslot?: PersistedTimeslot;
+  timeslot?: PersistedAdminTimeslot;
 }
 
 export default function TimeslotFormDialog(props: TimeslotFormDialogProps) {

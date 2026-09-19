@@ -3,7 +3,7 @@ import { Button, Panel, Title, Toolbar, ToolbarSpacer } from "@ui5/webcomponents
 
 import CenteredBusyIndicator from "@/components/ui/CenteredBusyIndicator";
 
-import type { PersistedTimeslot } from "../types";
+import type { PersistedUserTimeslot } from "../types";
 
 import TimeslotFormDialog from "./TimeslotFormDialog";
 import TimeslotsTable from "./TimeslotsTable";
@@ -11,12 +11,12 @@ import TimeslotsTable from "./TimeslotsTable";
 import "./TimeslotsView.css";
 
 type DialogState =
-  { mode: "create"; timeslot: null } | { mode: "edit"; timeslot: PersistedTimeslot } | null;
+  { mode: "create"; timeslot: null } | { mode: "edit"; timeslot: PersistedUserTimeslot } | null;
 
 function TimeslotsView() {
   const [dialogState, setDialogState] = useState<DialogState>(null);
 
-  const handleEditTimeslot = useCallback((timeslot: PersistedTimeslot) => {
+  const handleEditTimeslot = useCallback((timeslot: PersistedUserTimeslot) => {
     setDialogState({ mode: "edit", timeslot });
   }, []);
 
