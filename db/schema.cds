@@ -17,7 +17,7 @@ entity Events : cuid, managed {
 type TimeslotStatus     : String enum {
     open;
     confirmed;
-    requested
+    requested;
 };
 
 entity Timeslots : cuid, managed {
