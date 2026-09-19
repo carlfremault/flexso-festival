@@ -1,9 +1,9 @@
 import { useMutationState } from "@tanstack/react-query";
 import { MessageStrip } from "@ui5/webcomponents-react";
 
-import type { UpdateEventResult } from "@/features/events/queries";
+import type { UpdateEventResult } from "@/features/events/adminQueries";
 
-import { useAllTimeslots } from "../queries";
+import { useAllTimeslots } from "../adminQueries";
 
 export function TimeslotsRescheduleAlert({ eventId }: { eventId: string }) {
   const { data: timeslots } = useAllTimeslots(eventId);

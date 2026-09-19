@@ -21,7 +21,7 @@ import FormField from "@/components/ui/FormField";
 import { useFormState } from "@/hooks/useFormState";
 import { type CdsDate, isCdsDate } from "@/utils/dateTimeUtils";
 
-import { useCreateEvent, useUpdateEvent } from "../queries";
+import { useCreateEvent, useUpdateEvent } from "../adminQueries";
 import type { PersistedEvent } from "../types";
 
 import "./EventForm.css";

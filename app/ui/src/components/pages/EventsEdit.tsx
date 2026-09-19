@@ -2,8 +2,8 @@ import { useRef, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router";
 import { FlexBox, Toolbar, ToolbarButton } from "@ui5/webcomponents-react";
 
+import { useEvent } from "@/features/events/adminQueries";
 import EventForm, { type EventFormHandle } from "@/features/events/components/EventForm";
-import { useEvent } from "@/features/events/queries";
 import { TimeslotsRescheduleAlert } from "@/features/timeslots/components/TimeslotsRescheduleAlert";
 import TimeslotsView from "@/features/timeslots/components/TimeslotsView";
 

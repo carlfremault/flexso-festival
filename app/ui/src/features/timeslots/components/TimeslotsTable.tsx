@@ -12,7 +12,7 @@ import {
 import { useEventId } from "@/hooks/useEventId";
 import { formatDate } from "@/utils/dateTimeUtils";
 
-import { useAllTimeslots } from "../queries";
+import { useAllTimeslots } from "../adminQueries";
 import type { PersistedTimeslot } from "../types";
 
 import { TimeslotDeleteDialog } from "./TimeslotDeleteDialog";
