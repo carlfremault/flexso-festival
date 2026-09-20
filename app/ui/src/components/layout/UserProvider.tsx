@@ -5,6 +5,16 @@ import { apiFetch } from "@/utils/apiFetch";
 
 interface UserContextValue {
   isAdmin: boolean;
+  id: string;
+  givenName: string;
+  familyName: string;
+}
+
+interface WhoAmIResponse {
+  isAdmin: boolean;
+  id: string;
+  givenName?: string;
+  familyName?: string;
 }
 
 const UserContext = createContext<UserContextValue | null>(null);
@@ -17,21 +27,28 @@ export const useUser = () => {
   return context;
 };
 
-const fetchIsAdmin = async (): Promise<{ isAdmin: boolean }> =>
+const fetchWhoAmI = async (): Promise<WhoAmIResponse> =>
   apiFetch({ service: "user", path: "/whoami()" });
 
-const useIsAdmin = () => {
+const useWhoAmI = () => {
   const { data } = useSuspenseQuery({
-    queryKey: ["user", "isAdmin"],
-    queryFn: fetchIsAdmin,
+    queryKey: ["user", "whoami"],
+    queryFn: fetchWhoAmI,
   });
   return data;
 };
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const data = useIsAdmin();
+  const data = useWhoAmI();
 
-  const value = useMemo(() => ({ isAdmin: data?.isAdmin ?? false }), [data]);
+  const value = useMemo(() => {
+    const isAdmin = data.isAdmin;
+    const id = data.id;
+    const givenName = data.givenName ?? "";
+    const familyName = data.familyName ?? "";
+
+    return { isAdmin, id, givenName, familyName };
+  }, [data]);
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
