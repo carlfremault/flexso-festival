@@ -35,10 +35,6 @@ annotate AdminService.Timeslots with {
      status     @mandatory;
 }
 
-annotate AdminService.Artists with {
-     name @mandatory;
-}
-
 annotate AdminService.Availabilities with {
      date   @mandatory;
      status @mandatory;

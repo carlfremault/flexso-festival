@@ -14,11 +14,18 @@ service UserService @(odata: '/user') {
             availabilities
         };
 
-    function whoami() returns {
+    function whoami()                                        returns {
         isAdmin    : Boolean;
         id         : String;
         givenName  : String;
         familyName : String;
+    };
+
+    function searchArtists(searchString: String @mandatory ) returns array of {
+        deezerId : Integer;
+        name     : String;
+        imageUrl : String;
+        nbFans   : Integer;
     };
 
 }

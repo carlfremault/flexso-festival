@@ -13,6 +13,7 @@ export default tseslint.config(
       "@cds-models/**",
       "db/data/**",
       "*.sqlite",
+      "**/dist/**",
     ],
   },
   eslint.configs.recommended,

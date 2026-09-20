@@ -31,8 +31,10 @@ entity Timeslots : cuid, managed {
 }
 
 entity Artists : cuid, managed {
+    deezerId       : Integer;
     name           : String;
-    genre          : String;
+    imageUrl       : String;
+    nbFans         : Integer;
     timeslots      : Association to many Timeslots
                          on timeslots.artist = $self;
     availabilities : Composition of many Availabilities
