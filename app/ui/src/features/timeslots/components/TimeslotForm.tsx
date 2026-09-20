@@ -60,6 +60,7 @@ export default function TimeslotForm(props: TimeslotFormProps) {
   const { ref, onClose, onStateChange, timeslot } = props;
   const editMode = !!timeslot;
   const eventId = useEventId();
+  const timeslotNeedsRescheduling = timeslot && timeslot.needsRescheduling;
 
   // HOOKS
   const { data: artists } = useAllArtists();
@@ -167,7 +168,7 @@ export default function TimeslotForm(props: TimeslotFormProps) {
             <DatePicker
               required
               value={formValues.date}
-              readonly={isSingleDateEvent}
+              readonly={isSingleDateEvent && !timeslotNeedsRescheduling}
               valueFormat="yyyy-MM-dd"
               displayFormat="medium"
               onChange={(e) => handleFieldChange("date", e.target.value)}
