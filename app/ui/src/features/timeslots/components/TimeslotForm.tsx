@@ -79,7 +79,7 @@ export default function TimeslotForm(props: TimeslotFormProps) {
     formError,
     handleFieldChange,
     handleError,
-    handleErrorReset,
+    resetFormState,
     isDirty,
   } = useFormState(
     getInitialValues(timeslot, isSingleDateEvent ? event.startDate : undefined),
@@ -94,12 +94,12 @@ export default function TimeslotForm(props: TimeslotFormProps) {
   // HANDLERS
   const handleEditSuccess = () => {
     showToast("Timeslot updated!");
-    handleErrorReset();
+    resetFormState();
     onClose();
   };
   const handleCreateSuccess = () => {
     showToast("Timeslot created!");
-    handleErrorReset();
+    resetFormState();
     onClose();
   };
 

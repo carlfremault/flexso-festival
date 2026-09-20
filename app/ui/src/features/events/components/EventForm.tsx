@@ -70,8 +70,8 @@ export default function EventForm(props: EventFormProps) {
     formError,
     handleFieldChange,
     handleError,
-    handleErrorReset,
-    handleFormReset,
+    resetFormState,
+    resetForm,
     isDirty,
   } = useFormState(getInitialValues(event), EVENT_FORM_FIELDS);
 
@@ -90,13 +90,13 @@ export default function EventForm(props: EventFormProps) {
 
   const handleEditSuccess = () => {
     showToast("Event updated!");
-    handleErrorReset();
+    resetFormState();
     onSaved?.();
   };
 
   const handleCreateSuccess = (created: PersistedAdminEvent) => {
     showToast("Event created!");
-    handleErrorReset();
+    resetFormState();
     navigate(`/events/${created.ID}`, { replace: true });
   };
 
@@ -133,7 +133,7 @@ export default function EventForm(props: EventFormProps) {
 
   useImperativeHandle(ref, () => ({
     submit: () => handleSubmit(),
-    cancel: () => handleFormReset(getInitialValues(event)),
+    cancel: () => resetForm(getInitialValues(event)),
   }));
 
   return (
