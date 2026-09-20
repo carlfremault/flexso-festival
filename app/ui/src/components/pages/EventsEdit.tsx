@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router";
 import { FlexBox, Toolbar, ToolbarButton } from "@ui5/webcomponents-react";
 
@@ -8,6 +8,7 @@ import { TimeslotsRescheduleAlert } from "@/features/timeslots/components/Timesl
 import TimeslotsView from "@/features/timeslots/components/TimeslotsView";
 
 import PageWrapper from "../layout/PageWrapper";
+import CenteredBusyIndicator from "../ui/CenteredBusyIndicator";
 
 export default function EventsEdit() {
   const params = useParams();
@@ -16,9 +17,10 @@ export default function EventsEdit() {
 }
 
 function EventsEditView({ id }: { id: string }) {
+  const [isFormDisabled, setIsFormDisabled] = useState(true);
+
   const navigate = useNavigate();
   const formRef = useRef<EventFormHandle>(null);
-  const [isFormDisabled, setIsFormDisabled] = useState(true);
 
   const { data: event } = useEvent(id);
 
@@ -42,8 +44,10 @@ function EventsEditView({ id }: { id: string }) {
     >
       <FlexBox direction="Column" gap={16}>
         <EventForm ref={formRef} event={event} onStateChange={handleStateChange} />
-        <TimeslotsRescheduleAlert eventId={id} />
-        <TimeslotsView />
+        <Suspense fallback={<CenteredBusyIndicator />}>
+          <TimeslotsRescheduleAlert eventId={id} />
+          <TimeslotsView />
+        </Suspense>
       </FlexBox>
     </PageWrapper>
   );

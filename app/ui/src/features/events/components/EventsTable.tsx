@@ -1,36 +1,24 @@
-import { useMemo, useState } from "react";
-import { useNavigate } from "react-router";
+import { useMemo } from "react";
 import {
   AnalyticalTable,
   type AnalyticalTableColumnDefinition,
   AnalyticalTableScaleWidthMode,
-  Button,
-  FlexBox,
   IllustratedMessage,
 } from "@ui5/webcomponents-react";
+import type { CellInstance } from "@ui5/webcomponents-react/dist/components/AnalyticalTable/types/index.js";
 
 import { formatDateRange } from "@/utils/dateTimeUtils";
 
-import { useAllEvents } from "../adminQueries";
-import type { PersistedUserEvent } from "../types";
+import type { PersistedAdminEvent, PersistedUserEvent } from "../types";
 
-import { EventDeleteDialog } from "./EventDeleteDialog";
+type RowActions<T> = ({ row }: { row: T }) => React.ReactNode;
 
-import "@ui5/webcomponents-icons/dist/edit.js";
-import "@ui5/webcomponents-icons/dist/delete.js";
-
-export default function EventsTable() {
-  const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
-
-  const { data: events } = useAllEvents();
-
-  const handleSetDeleteTarget = (event: PersistedUserEvent) => {
-    setDeleteTarget({ id: event.ID, name: event.name });
-  };
-
-  const handleResetDeleteTarget = () => {
-    setDeleteTarget(null);
-  };
+interface EventsTableProps {
+  events: PersistedAdminEvent[] | PersistedUserEvent[];
+  rowActions: RowActions<PersistedAdminEvent | PersistedUserEvent>;
+}
+export default function EventsTable(props: EventsTableProps) {
+  const { events, rowActions } = props;
 
   const columns = useMemo<AnalyticalTableColumnDefinition[]>(
     () => [
@@ -50,66 +38,29 @@ export default function EventsTable() {
         Header: "Actions",
         disableSortBy: true,
         minWidth: 100,
-        Cell: ({ row }) => <RowActions row={row.original} onDeleteClick={handleSetDeleteTarget} />,
+        Cell: (instance: CellInstance) => rowActions({ row: instance.row.original }),
         hAlign: "Center",
       },
     ],
-    [],
+    [rowActions],
   );
 
   return (
-    <>
-      <AnalyticalTable
-        columns={columns}
-        data={events}
-        sortable
-        filterable
-        alternateRowColor
-        scaleWidthMode={AnalyticalTableScaleWidthMode.Grow}
-        accessibleName="Events"
-        NoDataComponent={() => (
-          <IllustratedMessage
-            design="Auto"
-            titleText="No events found :-("
-            subtitleText="Let's start planning!"
-          />
-        )}
-      />
-      <EventDeleteDialog
-        open={!!deleteTarget}
-        deleteTarget={deleteTarget}
-        onClose={handleResetDeleteTarget}
-      />
-    </>
-  );
-}
-
-interface RowActionsProps {
-  row: PersistedUserEvent;
-  onDeleteClick: (row: PersistedUserEvent) => void;
-}
-function RowActions(props: RowActionsProps) {
-  const { row, onDeleteClick } = props;
-
-  const navigate = useNavigate();
-
-  return (
-    <FlexBox gap={12}>
-      <Button
-        onClick={() => navigate(`/events/${row.ID}`)}
-        icon="edit"
-        accessibleName={`Edit event ${row.name}`}
-        accessibleRole="Link"
-        design="Transparent"
-        tooltip="Edit event name, dates and manage timeslots"
-      />
-      <Button
-        onClick={() => onDeleteClick(row)}
-        icon="delete"
-        design="Transparent"
-        accessibleName={`Delete event ${row.name}`}
-        tooltip="Delete event"
-      />
-    </FlexBox>
+    <AnalyticalTable
+      columns={columns}
+      data={events}
+      sortable
+      filterable
+      alternateRowColor
+      scaleWidthMode={AnalyticalTableScaleWidthMode.Grow}
+      accessibleName="Events"
+      NoDataComponent={() => (
+        <IllustratedMessage
+          design="Auto"
+          titleText="No events found :-("
+          subtitleText="Let's start planning!"
+        />
+      )}
+    />
   );
 }

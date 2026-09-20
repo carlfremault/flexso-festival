@@ -1,45 +1,32 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   AnalyticalTable,
   type AnalyticalTableColumnDefinition,
   AnalyticalTableScaleWidthMode,
-  Button,
   FlexBox,
   Icon,
   IllustratedMessage,
 } from "@ui5/webcomponents-react";
+import type { CellInstance } from "@ui5/webcomponents-react/dist/components/AnalyticalTable/types/index.js";
 
-import { useEventId } from "@/hooks/useEventId";
 import { formatDate } from "@/utils/dateTimeUtils";
 
-import { useAllTimeslots } from "../adminQueries";
-import type { PersistedAdminTimeslot } from "../types";
+import type { PersistedAdminTimeslot, PersistedUserTimeslot } from "../types";
 
-import { TimeslotDeleteDialog } from "./TimeslotDeleteDialog";
 import { TimeslotStatusBadge } from "./TimeslotStatusBadge";
 
-import "@ui5/webcomponents-icons/dist/edit.js";
-import "@ui5/webcomponents-icons/dist/delete.js";
 import "@ui5/webcomponents-icons/dist/alert.js";
 
+type RowActions<T> = ({ row }: { row: T }) => React.ReactNode;
+
 interface TimeslotsTableProps {
-  onEdit: (timeslot: PersistedAdminTimeslot) => void;
+  timeslots: PersistedAdminTimeslot[] | PersistedUserTimeslot[];
+  emptyTableSubTitle: string;
+  rowActions?: RowActions<PersistedAdminTimeslot | PersistedUserTimeslot>;
 }
 
 export default function TimeslotsTable(props: TimeslotsTableProps) {
-  const { onEdit } = props;
-  const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
-
-  const eventId = useEventId();
-  const { data: timeslots } = useAllTimeslots(eventId);
-
-  const handleSetDeleteTarget = (timeslot: PersistedAdminTimeslot) => {
-    setDeleteTarget({ id: timeslot.ID, name: timeslot.name });
-  };
-
-  const handleResetDeleteTarget = () => {
-    setDeleteTarget(null);
-  };
+  const { timeslots, emptyTableSubTitle, rowActions } = props;
 
   const columns = useMemo<AnalyticalTableColumnDefinition[]>(
     () => [
@@ -68,73 +55,38 @@ export default function TimeslotsTable(props: TimeslotsTableProps) {
         ),
         hAlign: "Center",
       },
-      {
-        id: "actions",
-        Header: "Actions",
-        disableSortBy: true,
-        minWidth: 100,
-        Cell: ({ row }) => (
-          <RowActions row={row.original} onEdit={onEdit} onDeleteClick={handleSetDeleteTarget} />
-        ),
-        hAlign: "Center",
-      },
+      ...(rowActions
+        ? ([
+            {
+              id: "actions",
+              Header: "Actions",
+              disableSortBy: true,
+              minWidth: 100,
+              Cell: (instance: CellInstance) => rowActions({ row: instance.row.original }),
+              hAlign: "Center",
+            },
+          ] as AnalyticalTableColumnDefinition[])
+        : []),
     ],
-    [onEdit],
+    [rowActions],
   );
 
   return (
-    <>
-      <AnalyticalTable
-        columns={columns}
-        data={timeslots}
-        sortable
-        filterable
-        alternateRowColor
-        scaleWidthMode={AnalyticalTableScaleWidthMode.Grow}
-        accessibleName="Timeslots"
-        NoDataComponent={() => (
-          <IllustratedMessage
-            design="Auto"
-            titleText="No timeslots found :-("
-            subtitleText="Let's start planning!"
-          />
-        )}
-      />
-      <TimeslotDeleteDialog
-        open={!!deleteTarget}
-        deleteTarget={deleteTarget}
-        onClose={handleResetDeleteTarget}
-        eventId={eventId}
-      />
-    </>
-  );
-}
-
-interface RowActionsProps {
-  row: PersistedAdminTimeslot;
-  onEdit: (row: PersistedAdminTimeslot) => void;
-  onDeleteClick: (row: PersistedAdminTimeslot) => void;
-}
-
-function RowActions(props: RowActionsProps) {
-  const { row, onEdit, onDeleteClick } = props;
-
-  return (
-    <FlexBox gap={12}>
-      <Button
-        onClick={() => onEdit(row)}
-        icon="edit"
-        accessibleName={`Edit timeslot ${row.name}`}
-        design="Transparent"
-        tooltip="Edit timeslot name, time, artist and status"
-      />
-      <Button
-        onClick={() => onDeleteClick(row)}
-        icon="delete"
-        design="Transparent"
-        accessibleName={`Delete timeslot ${row.name}`}
-        tooltip="Delete timeslot"
-      />
-    </FlexBox>
+    <AnalyticalTable
+      columns={columns}
+      data={timeslots}
+      sortable
+      filterable
+      alternateRowColor
+      scaleWidthMode={AnalyticalTableScaleWidthMode.Grow}
+      accessibleName="Timeslots"
+      NoDataComponent={() => (
+        <IllustratedMessage
+          design="Auto"
+          titleText="No timeslots found :-("
+          subtitleText={emptyTableSubTitle}
+        />
+      )}
+    />
   );
 }
