@@ -1,11 +1,11 @@
-ID,name,genre
-1ca7b810-9dad-11d1-80b4-00c04fd430c8,Sonic Youth,Rock
-2ca7b810-9dad-11d1-80b4-00c04fd430c8,Orbital,Electronic
-3ca7b810-9dad-11d1-80b4-00c04fd430c8,Mastodon,Rock
-4ca7b810-9dad-11d1-80b4-00c04fd430c8,All Them Witches,Rock
-5ca7b810-9dad-11d1-80b4-00c04fd430c8,Sleaford Mods,Punk
-6ca7b810-9dad-11d1-80b4-00c04fd430c8,Amyl and the Sniffers,Punk
-7ca7b810-9dad-11d1-80b4-00c04fd430c8,Thelonious Monk,Jazz
-8ca7b810-9dad-11d1-80b4-00c04fd430c8,Keith Jarrett,Jazz
-9ca7b810-9dad-11d1-80b4-00c04fd430c8,Photek,Electronic
-1ca7b810-9dad-11d1-80b4-00c04fd430c0,Röyksopp,Electronic
+ID,deezerId,name,imageUrl,nbFans
+1ca7b810-9dad-11d1-80b4-00c04fd430c8,1302,Sonic Youth,https://cdn-images.dzcdn.net/images/artist/4cd0f903d64ef1f344d58f12f229fee2/56x56-000000-80-0-0.jpg,343498
+2ca7b810-9dad-11d1-80b4-00c04fd430c8,3065,Orbital,https://cdn-images.dzcdn.net/images/artist/6fd210d9281087db0e6676e43d9be0e4/56x56-000000-80-0-0.jpg,45516
+3ca7b810-9dad-11d1-80b4-00c04fd430c8,9267,Mastodon,https://cdn-images.dzcdn.net/images/artist/080bcc35e30d506b5cf6b5e83e7665ac/56x56-000000-80-0-0.jpg,208830
+4ca7b810-9dad-11d1-80b4-00c04fd430c8,2750711,All Them Witches,https://cdn-images.dzcdn.net/images/artist/baa160a505d0979094ed26eedb94c36e/56x56-000000-80-0-0.jpg,34832
+5ca7b810-9dad-11d1-80b4-00c04fd430c8,5326959,Sleaford Mods,https://cdn-images.dzcdn.net/images/artist/ed890aed7eb160dfed35d0a208ea8c11/56x56-000000-80-0-0.jpg,40852
+6ca7b810-9dad-11d1-80b4-00c04fd430c8,14317335,Amyl and the Sniffers,https://cdn-images.dzcdn.net/images/artist/b75431a14d36a5359ba21a91d7d3862f/56x56-000000-80-0-0.jpg,42736
+7ca7b810-9dad-11d1-80b4-00c04fd430c8,5136,Thelonious Monk,https://cdn-images.dzcdn.net/images/artist/8d2c83c5d54e19ad83572b5c5ae1ccc0/56x56-000000-80-0-0.jpg,253281
+8ca7b810-9dad-11d1-80b4-00c04fd430c8,10611,Keith Jarrett,https://cdn-images.dzcdn.net/images/artist/ba6d113f166bfb4cf4dc470ad012f2ba/56x56-000000-80-0-0.jpg,461061
+9ca7b810-9dad-11d1-80b4-00c04fd430c8,3203,Photek,https://cdn-images.dzcdn.net/images/artist/94668b3c6a4ee49921986c1a89f66665/56x56-000000-80-0-0.jpg,8458
+1ca7b810-9dad-11d1-80b4-00c04fd430c0,480,Röyksopp,https://cdn-images.dzcdn.net/images/artist/41923b4d4a4a58dbb316eb335b6c6cb0/56x56-000000-80-0-0.jpg,358008

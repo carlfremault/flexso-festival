@@ -47,7 +47,13 @@
       "[production]": {
         "auth": "xsuaa"
       },
-      "html5-repo": true
+      "html5-repo": true,
+      "deezer": {
+        "kind": "rest",
+        "credentials": {
+          "url": "https://api.deezer.com"
+        }
+      }
     }
   }
 }
