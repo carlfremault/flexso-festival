@@ -19,13 +19,13 @@ export default function EventsCreate() {
       backTo="/events"
       actionsBar={
         <Toolbar design="Transparent">
-          <ToolbarButton design="Default" text="Cancel" onClick={() => navigate("/events")} />
           <ToolbarButton
             design="Emphasized"
             text="Save"
             onClick={() => formRef.current?.submit()}
             disabled={isFormDisabled}
           />
+          <ToolbarButton design="Default" text="Cancel" onClick={() => navigate("/events")} />
         </Toolbar>
       }
     >

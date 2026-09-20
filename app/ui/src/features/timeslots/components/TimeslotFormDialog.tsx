@@ -50,15 +50,15 @@ export default function TimeslotFormDialog(props: TimeslotFormDialogProps) {
           design="Footer"
           endContent={
             <>
-              <Button design="Transparent" onClick={onClose}>
-                Cancel
-              </Button>
               <Button
                 design="Emphasized"
                 onClick={() => formRef.current?.submit()}
                 disabled={isFormDisabled}
               >
                 Save
+              </Button>
+              <Button design="Transparent" onClick={onClose}>
+                Cancel
               </Button>
             </>
           }
