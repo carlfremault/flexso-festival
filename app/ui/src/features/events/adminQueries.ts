@@ -37,7 +37,7 @@ const useAllEvents = (): UseSuspenseQueryResult<PersistedAdminEvent[]> => {
 const fetchEvent = async (id: string): Promise<PersistedAdminEvent> =>
   apiFetch({
     service: "admin",
-    path: `/Events/${id}?$expand=timeslots`,
+    path: `/Events/${id}`,
     errorMessage: `Failed to load event ${id}`,
   });
 

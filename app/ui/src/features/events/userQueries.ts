@@ -29,7 +29,7 @@ const useAllUserEvents = (): UseSuspenseQueryResult<PersistedUserEvent[]> => {
 const fetchUserEvent = async (id: string): Promise<PersistedUserEvent> =>
   apiFetch({
     service: "user",
-    path: `/Events/${id}?$expand=timeslots`,
+    path: `/Events/${id}`,
     errorMessage: `Failed to load event ${id}`,
   });
 
