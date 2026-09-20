@@ -35,10 +35,10 @@ export interface TimeslotFormHandle {
   submit: () => void;
 }
 
-function getInitialValues(timeslot?: Timeslot) {
+function getInitialValues(timeslot?: Timeslot, singleEventDate?: string) {
   return {
     name: timeslot?.name ?? "",
-    date: timeslot?.date ?? "",
+    date: timeslot?.date ?? singleEventDate ?? "",
     startTime: timeslot?.startTime ?? "",
     endTime: timeslot?.endTime ?? "",
     artist_ID: timeslot?.artist_ID ?? "",
@@ -64,6 +64,7 @@ export default function TimeslotForm(props: TimeslotFormProps) {
   // HOOKS
   const { data: artists } = useAllArtists();
   const { data: event } = useEvent(eventId);
+  const isSingleDateEvent = event.startDate === event.endDate;
 
   const { showToast } = useToast();
 
@@ -80,7 +81,10 @@ export default function TimeslotForm(props: TimeslotFormProps) {
     handleError,
     handleReset,
     isDirty,
-  } = useFormState(getInitialValues(timeslot), TIMESLOT_FORM_FIELDS);
+  } = useFormState(
+    getInitialValues(timeslot, isSingleDateEvent ? event.startDate : undefined),
+    TIMESLOT_FORM_FIELDS,
+  );
 
   useEffect(() => {
     const isFormDisabled = !isDirty || isPending;
@@ -163,6 +167,7 @@ export default function TimeslotForm(props: TimeslotFormProps) {
             <DatePicker
               required
               value={formValues.date}
+              readonly={isSingleDateEvent}
               valueFormat="yyyy-MM-dd"
               displayFormat="medium"
               onChange={(e) => handleFieldChange("date", e.target.value)}
