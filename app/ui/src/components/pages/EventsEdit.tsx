@@ -41,7 +41,6 @@ function EventsEditView({ id }: { id: string }) {
           {!isEditing && (
             <ToolbarButton design="Emphasized" text="Edit" onClick={() => setIsEditing(true)} />
           )}
-          {isEditing && <ToolbarButton design="Default" text="Cancel" onClick={handleCancelEdit} />}
           {isEditing && (
             <ToolbarButton
               design="Emphasized"
@@ -50,6 +49,7 @@ function EventsEditView({ id }: { id: string }) {
               disabled={isFormDisabled}
             />
           )}
+          {isEditing && <ToolbarButton design="Default" text="Cancel" onClick={handleCancelEdit} />}
         </Toolbar>
       }
     >
