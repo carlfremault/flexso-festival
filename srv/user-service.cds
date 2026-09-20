@@ -15,7 +15,10 @@ service UserService @(odata: '/user') {
         };
 
     function whoami() returns {
-        isAdmin : Boolean
+        isAdmin    : Boolean;
+        id         : String;
+        givenName  : String;
+        familyName : String;
     };
 
 }
