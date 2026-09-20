@@ -2,22 +2,27 @@ import { useLocation, useNavigate } from "react-router";
 import {
   Breadcrumbs,
   BreadcrumbsItem,
+  Button,
   DynamicPage,
   DynamicPageTitle,
+  FlexBox,
   Title,
 } from "@ui5/webcomponents-react";
 
 import { createNavClickHandler, toHref } from "@/utils/routerUtils";
+
+import "@ui5/webcomponents-icons/dist/nav-back.js";
 
 interface PageWrapperProps {
   title: string;
   children: React.ReactNode;
   actionsBar?: React.ReactElement;
   currentBreadcrumb?: string;
+  backTo?: string;
 }
 
 export default function PageWrapper(props: PageWrapperProps) {
-  const { children, title, actionsBar, currentBreadcrumb } = props;
+  const { children, title, actionsBar, currentBreadcrumb, backTo } = props;
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -57,7 +62,20 @@ export default function PageWrapper(props: PageWrapperProps) {
               ))}
             </Breadcrumbs>
           }
-          heading={<Title level="H1">{title}</Title>}
+          heading={
+            <FlexBox alignItems="Center" gap={8}>
+              {backTo && (
+                <Button
+                  design="Transparent"
+                  icon="nav-back"
+                  accessibleName="Back"
+                  tooltip="Back"
+                  onClick={() => navigate(backTo)}
+                />
+              )}
+              <Title level="H1">{title}</Title>
+            </FlexBox>
+          }
         ></DynamicPageTitle>
       }
     >

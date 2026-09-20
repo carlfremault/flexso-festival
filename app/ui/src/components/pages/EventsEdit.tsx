@@ -1,5 +1,5 @@
 import { Suspense, useRef, useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router";
+import { Navigate, useParams } from "react-router";
 import { FlexBox, Toolbar, ToolbarButton } from "@ui5/webcomponents-react";
 
 import { useEvent } from "@/features/events/adminQueries";
@@ -18,32 +18,49 @@ export default function EventsEdit() {
 
 function EventsEditView({ id }: { id: string }) {
   const [isFormDisabled, setIsFormDisabled] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
 
-  const navigate = useNavigate();
   const formRef = useRef<EventFormHandle>(null);
 
   const { data: event } = useEvent(id);
 
   const handleStateChange = (isFormDisabled: boolean) => setIsFormDisabled(isFormDisabled);
 
+  const handleCancelEdit = () => {
+    formRef.current?.cancel();
+    setIsEditing(false);
+  };
+
   return (
     <PageWrapper
-      title="Edit Event"
+      title={event.name}
       currentBreadcrumb={event.name}
+      backTo="/events"
       actionsBar={
         <Toolbar design="Transparent">
-          <ToolbarButton design="Default" text="Cancel" onClick={() => navigate("/events")} />
-          <ToolbarButton
-            design="Emphasized"
-            text="Save"
-            onClick={() => formRef.current?.submit()}
-            disabled={isFormDisabled}
-          />
+          {!isEditing && (
+            <ToolbarButton design="Emphasized" text="Edit" onClick={() => setIsEditing(true)} />
+          )}
+          {isEditing && <ToolbarButton design="Default" text="Cancel" onClick={handleCancelEdit} />}
+          {isEditing && (
+            <ToolbarButton
+              design="Emphasized"
+              text="Save"
+              onClick={() => formRef.current?.submit()}
+              disabled={isFormDisabled}
+            />
+          )}
         </Toolbar>
       }
     >
       <FlexBox direction="Column" gap={16}>
-        <EventForm ref={formRef} event={event} onStateChange={handleStateChange} />
+        <EventForm
+          ref={formRef}
+          event={event}
+          readonly={!isEditing}
+          onStateChange={handleStateChange}
+          onSaved={() => setIsEditing(false)}
+        />
         <Suspense fallback={<CenteredBusyIndicator />}>
           <TimeslotsRescheduleAlert eventId={id} />
           <TimeslotsView />

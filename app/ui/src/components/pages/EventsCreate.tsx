@@ -16,6 +16,7 @@ export default function EventsCreate() {
   return (
     <PageWrapper
       title="New Event"
+      backTo="/events"
       actionsBar={
         <Toolbar design="Transparent">
           <ToolbarButton design="Default" text="Cancel" onClick={() => navigate("/events")} />

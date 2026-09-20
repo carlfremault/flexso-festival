@@ -28,6 +28,7 @@ import "./EventForm.css";
 
 export interface EventFormHandle {
   submit: () => void;
+  cancel: () => void;
 }
 
 function getInitialValues(event?: Event) {
@@ -46,10 +47,12 @@ interface EventFormProps {
   ref: React.Ref<EventFormHandle>;
   onStateChange: (isFormDisabled: boolean) => void;
   event?: PersistedAdminEvent;
+  readonly?: boolean;
+  onSaved?: () => void;
 }
 
 export default function EventForm(props: EventFormProps) {
-  const { ref, onStateChange, event } = props;
+  const { ref, onStateChange, event, readonly = false, onSaved } = props;
   const editMode = !!event;
 
   // HOOKS
@@ -67,7 +70,8 @@ export default function EventForm(props: EventFormProps) {
     formError,
     handleFieldChange,
     handleError,
-    handleReset,
+    handleErrorReset,
+    handleFormReset,
     isDirty,
   } = useFormState(getInitialValues(event), EVENT_FORM_FIELDS);
 
@@ -79,18 +83,20 @@ export default function EventForm(props: EventFormProps) {
   // HANDLERS
   const handleChangeDateRange = (e: CustomEvent<CalendarSelectionChangeEventDetail>) => {
     e.preventDefault();
+    if (readonly) return;
     handleFieldChange("startDate", e.detail.selectedValues[0]);
     handleFieldChange("endDate", e.detail.selectedValues[1]);
   };
 
   const handleEditSuccess = () => {
     showToast("Event updated!");
-    handleReset();
+    handleErrorReset();
+    onSaved?.();
   };
 
   const handleCreateSuccess = (created: PersistedAdminEvent) => {
     showToast("Event created!");
-    handleReset();
+    handleErrorReset();
     navigate(`/events/${created.ID}`, { replace: true });
   };
 
@@ -127,6 +133,7 @@ export default function EventForm(props: EventFormProps) {
 
   useImperativeHandle(ref, () => ({
     submit: () => handleSubmit(),
+    cancel: () => handleFormReset(getInitialValues(event)),
   }));
 
   return (
@@ -160,6 +167,7 @@ export default function EventForm(props: EventFormProps) {
             <Input
               type="Text"
               required
+              readonly={readonly}
               value={formValues.name}
               onInput={(e) => handleFieldChange("name", e.target.value)}
               valueState={fieldErrors.name ? "Negative" : "None"}
@@ -201,6 +209,7 @@ export default function EventForm(props: EventFormProps) {
           <FormItem labelContent={<Label>Notes (optional)</Label>}>
             <TextArea
               rows={5}
+              readonly={readonly}
               value={formValues.notes}
               onInput={(e) => handleFieldChange("notes", e.target.value)}
             />
