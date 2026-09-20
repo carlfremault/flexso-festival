@@ -31,10 +31,15 @@ export function useFormState<TValues extends Record<string, string | string[]>>(
     setFormError("Something went wrong. Please try again.");
   };
 
-  const handleReset = () => {
+  const resetFormState = () => {
     setFieldErrors({});
     setFormError(null);
     setIsDirty(false);
+  };
+
+  const resetForm = (values: TValues) => {
+    setFormValues(values);
+    resetFormState();
   };
 
   return {
@@ -45,7 +50,8 @@ export function useFormState<TValues extends Record<string, string | string[]>>(
     setFormError,
     handleFieldChange,
     handleError,
-    handleReset,
+    resetFormState,
+    resetForm,
     isDirty,
   };
 }

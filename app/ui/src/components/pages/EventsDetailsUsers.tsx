@@ -1,5 +1,5 @@
-import { Navigate, useNavigate, useParams } from "react-router";
-import { Panel, Title, Toolbar, ToolbarButton } from "@ui5/webcomponents-react";
+import { Navigate, useParams } from "react-router";
+import { Panel, Title, Toolbar } from "@ui5/webcomponents-react";
 
 import { useUserEvent } from "@/features/events/userQueries";
 import TimeslotsTable from "@/features/timeslots/components/TimeslotsTable";
@@ -14,21 +14,11 @@ export default function EventsDetailsUsers() {
 }
 
 function EventDetailsView({ id }: { id: string }) {
-  const navigate = useNavigate();
-
   const { data: event } = useUserEvent(id);
   const { data: timeslots } = useAllUserTimeslots(event.ID);
 
   return (
-    <PageWrapper
-      title="Event details"
-      currentBreadcrumb={event.name}
-      actionsBar={
-        <Toolbar design="Transparent">
-          <ToolbarButton design="Default" text="Back" onClick={() => navigate("/events")} />
-        </Toolbar>
-      }
-    >
+    <PageWrapper title={event.name} currentBreadcrumb={event.name} backTo="/events">
       <Panel
         className="timeslots-panel"
         fixed
