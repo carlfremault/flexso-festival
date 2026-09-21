@@ -6,7 +6,7 @@ import EventForm, { type EventFormHandle } from "@/features/events/components/Ev
 
 import PageWrapper from "../layout/PageWrapper";
 
-export default function EventsCreate() {
+export default function EventsCreateAdmin() {
   const navigate = useNavigate();
   const formRef = useRef<EventFormHandle>(null);
   const [isFormDisabled, setIsFormDisabled] = useState(true);

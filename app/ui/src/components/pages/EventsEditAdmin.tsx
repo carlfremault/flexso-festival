@@ -10,7 +10,7 @@ import TimeslotsView from "@/features/timeslots/components/TimeslotsView";
 import PageWrapper from "../layout/PageWrapper";
 import CenteredBusyIndicator from "../ui/CenteredBusyIndicator";
 
-export default function EventsEdit() {
+export default function EventsEditAdmin() {
   const params = useParams();
   if (!params.id) return <Navigate to="/events" replace />;
   return <EventsEditView id={params.id} />;
