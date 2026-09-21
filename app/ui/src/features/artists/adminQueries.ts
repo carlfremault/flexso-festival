@@ -1,4 +1,4 @@
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { queryOptions, useMutation, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 
 import { apiFetch } from "@/utils/apiFetch";
 
@@ -23,4 +23,30 @@ const artistsQueryOptions = queryOptions({
 
 const useAllArtists = () => useSuspenseQuery(artistsQueryOptions);
 
-export { artistsQueryOptions, useAllArtists };
+// -------------------------------
+// Delete artist
+// -------------------------------
+const deleteArtist = async (id: string): Promise<void> =>
+  apiFetch({
+    service: "admin",
+    path: `/Artists/${id}`,
+    init: {
+      method: "DELETE",
+    },
+    errorMessage: `Failed to remove artist ${id}`,
+  });
+
+const useDeleteArtist = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: deleteArtist,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin", "artists"] });
+      queryClient.invalidateQueries({ queryKey: ["user", "artists"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "timeslots"] });
+    },
+  });
+};
+
+export { artistsQueryOptions, useAllArtists, useDeleteArtist };
