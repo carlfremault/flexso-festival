@@ -1,5 +1,13 @@
 import { useMemo, useState } from "react";
-import { Button, FlexBox, MessageStrip, Panel, Search, Tag } from "@ui5/webcomponents-react";
+import {
+  Button,
+  FlexBox,
+  IllustratedMessage,
+  MessageStrip,
+  Panel,
+  Search,
+  Tag,
+} from "@ui5/webcomponents-react";
 
 import ArtistGrid from "@/features/artists/components/ArtistGrid";
 import type { SearchResultArtist } from "@/features/artists/types";
@@ -12,6 +20,7 @@ import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 
 import PageWrapper from "../layout/PageWrapper";
 import { useToast } from "../layout/Toast";
+import CenteredBusyIndicator from "../ui/CenteredBusyIndicator";
 
 import "@ui5/webcomponents-icons/dist/heart-2.js";
 
@@ -19,9 +28,11 @@ export default function ArtistsAdd() {
   const [searchString, setSearchString] = useState<string>("");
 
   const { data: persistedArtists } = useAllUserArtists();
-  const { data: searchedArtists, error: searchError } = useSearchedArtists(
-    useDebouncedValue(searchString),
-  );
+  const {
+    data: searchedArtists,
+    isFetching: searchIsFetching,
+    error: searchError,
+  } = useSearchedArtists(useDebouncedValue(searchString));
 
   const persistedByDeezerId = useMemo(
     () => new Map(persistedArtists.map((a) => [a.deezerId, a])),
@@ -98,7 +109,15 @@ export default function ArtistsAdd() {
             {(searchError ?? addArtistError)!.message}
           </MessageStrip>
         )}
-        {artists && (
+        {searchString && searchedArtists && searchedArtists.length == 0 && !searchIsFetching && (
+          <IllustratedMessage
+            design="Auto"
+            titleText="No artists found :-("
+            subtitleText="Try a different search term"
+          />
+        )}
+        {searchIsFetching && <CenteredBusyIndicator />}
+        {artists && artists.length > 0 && (
           <ArtistGrid artists={artists} getRowKey={getRowKey} renderAction={renderAction} />
         )}
       </FlexBox>
