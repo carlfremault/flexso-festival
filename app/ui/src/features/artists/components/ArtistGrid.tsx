@@ -9,6 +9,7 @@ interface ArtistGridProps<T extends ArtistCardArtist> {
   getRowKey: (artist: T) => string;
   renderAction?: (artist: T) => React.ReactElement;
 }
+
 export default function ArtistGrid<T extends ArtistCardArtist>(props: ArtistGridProps<T>) {
   const { artists, getRowKey, renderAction } = props;
 
