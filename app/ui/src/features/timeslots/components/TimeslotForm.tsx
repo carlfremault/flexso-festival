@@ -17,7 +17,7 @@ import type { TimeslotStatus } from "#cds-models/festival";
 
 import { useToast } from "@/components/layout/Toast";
 import FormField from "@/components/ui/FormField";
-import { useAllArtists } from "@/features/artists/queries";
+import { useAllArtists } from "@/features/artists/adminQueries";
 import { useEvent } from "@/features/events/adminQueries";
 import { useEventId } from "@/hooks/useEventId";
 import { useFormState } from "@/hooks/useFormState";

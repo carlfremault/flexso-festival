@@ -1,17 +1,17 @@
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 
-import type { Artists } from "#cds-models/AdminService";
-
 import { apiFetch } from "@/utils/apiFetch";
+
+import type { PersistedArtist } from "./types";
 
 // -----------------
 // Fetch all artists
 // -----------------
-const fetchAllArtists = async (): Promise<Artists> =>
+const fetchAllArtists = async (): Promise<PersistedArtist[]> =>
   (
-    await apiFetch<{ value: Artists }>({
+    await apiFetch<{ value: PersistedArtist[] }>({
       service: "admin",
-      path: "/Artists?$orderby=name",
+      path: "/Artists?$orderby=name&$expand=bookings($select=date;$expand=event($select=name)),requests($select=date;$expand=event($select=name))",
       errorMessage: "Failed to load artists",
     })
   ).value;

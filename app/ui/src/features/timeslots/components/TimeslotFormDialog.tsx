@@ -9,7 +9,7 @@ import {
 } from "@ui5/webcomponents-react";
 
 import CenteredBusyIndicator from "@/components/ui/CenteredBusyIndicator";
-import { artistsQueryOptions } from "@/features/artists/queries";
+import { artistsQueryOptions } from "@/features/artists/adminQueries";
 
 import type { PersistedAdminTimeslot } from "../types";
 
