@@ -17,12 +17,13 @@ interface PageWrapperProps {
   title: string;
   children: React.ReactNode;
   actionsBar?: React.ReactElement;
+  headerArea?: React.ReactElement;
   currentBreadcrumb?: string;
   backTo?: string;
 }
 
 export default function PageWrapper(props: PageWrapperProps) {
-  const { children, title, actionsBar, currentBreadcrumb, backTo } = props;
+  const { children, title, actionsBar, headerArea, currentBreadcrumb, backTo } = props;
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -44,6 +45,8 @@ export default function PageWrapper(props: PageWrapperProps) {
 
   return (
     <DynamicPage
+      headerArea={headerArea}
+      hidePinButton
       titleArea={
         <DynamicPageTitle
           actionsBar={actionsBar}
