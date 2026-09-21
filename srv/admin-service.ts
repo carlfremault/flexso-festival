@@ -2,7 +2,7 @@ import cds from "@sap/cds";
 
 export class AdminService extends cds.ApplicationService {
   init() {
-    const { Events, Timeslots } = this.entities;
+    const { Artists, Events, Timeslots } = this.entities;
 
     // -----------------------------------------------------------------------------
     // When an event's dates are updated, check if timeslots are still within range.
@@ -27,6 +27,15 @@ export class AdminService extends cds.ApplicationService {
           message: "Some timeslots fall outside the event dates and need rescheduling",
         });
       }
+    });
+
+    // ----------------------------------------------------------------------------------
+    // When an artist is deleted, clear them from all timeslots and set them back to open.
+    // ----------------------------------------------------------------------------------
+    this.before("DELETE", Artists, async (req) => {
+      const { ID } = req.data;
+
+      await UPDATE(Timeslots).set({ artist_ID: null, status: "open" }).where({ artist_ID: ID });
     });
 
     return super.init();
