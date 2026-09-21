@@ -1,4 +1,13 @@
-import { keepPreviousData, queryOptions, useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  queryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+
+import type { Artist } from "#cds-models/UserService";
 
 import { apiFetch } from "@/utils/apiFetch";
 
@@ -26,7 +35,7 @@ const useAllUserArtists = () => useSuspenseQuery(artistsQueryOptions);
 // -------------------------
 // Fetch artists from Deezer
 // -------------------------
-const fetchNewArtists = async (searchString: string): Promise<SearchResultArtist[]> =>
+const fetchSearchedArtists = async (searchString: string): Promise<SearchResultArtist[]> =>
   (
     await apiFetch<{ value: SearchResultArtist[] }>({
       service: "user",
@@ -35,12 +44,41 @@ const fetchNewArtists = async (searchString: string): Promise<SearchResultArtist
     })
   ).value;
 
-const useNewArtists = (searchString: string) =>
+const useSearchedArtists = (searchString: string) =>
   useQuery({
     enabled: !!searchString && searchString.length >= 2,
     queryKey: ["user", "searchArtists", searchString],
-    queryFn: () => fetchNewArtists(searchString),
+    queryFn: () => fetchSearchedArtists(searchString),
     placeholderData: searchString ? keepPreviousData : undefined,
   });
 
-export { artistsQueryOptions, useAllUserArtists, useNewArtists };
+// -------------
+// Create artist
+// -------------
+const createArtist = async (body: Artist): Promise<SearchResultArtist> =>
+  apiFetch({
+    service: "user",
+    path: "/Artists",
+    init: {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    },
+    errorMessage: "Failed to create artist",
+  });
+
+const useCreateArtist = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: createArtist,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin", "artists"] });
+      queryClient.invalidateQueries({ queryKey: ["user", "artists"] });
+    },
+  });
+};
+
+export { artistsQueryOptions, useAllUserArtists, useSearchedArtists, useCreateArtist };
