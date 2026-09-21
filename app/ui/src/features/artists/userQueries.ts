@@ -1,8 +1,8 @@
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions, useQuery, useSuspenseQuery } from "@tanstack/react-query";
 
 import { apiFetch } from "@/utils/apiFetch";
 
-import type { PersistedArtist } from "./types";
+import type { PersistedArtist, SearchResultArtist } from "./types";
 
 // -----------------
 // Fetch all artists
@@ -23,4 +23,24 @@ const artistsQueryOptions = queryOptions({
 
 const useAllUserArtists = () => useSuspenseQuery(artistsQueryOptions);
 
-export { artistsQueryOptions, useAllUserArtists };
+// -------------------------
+// Fetch artists from Deezer
+// -------------------------
+const fetchNewArtists = async (searchString: string): Promise<SearchResultArtist[]> =>
+  (
+    await apiFetch<{ value: SearchResultArtist[] }>({
+      service: "user",
+      path: `/searchArtists(searchString='${encodeURIComponent(searchString.replace(/'/g, "''"))}')`,
+      errorMessage: "Failed to search artists",
+    })
+  ).value;
+
+const useNewArtists = (searchString: string) =>
+  useQuery({
+    enabled: !!searchString && searchString.length >= 2,
+    queryKey: ["user", "searchArtists", searchString],
+    queryFn: () => fetchNewArtists(searchString),
+    placeholderData: searchString ? keepPreviousData : undefined,
+  });
+
+export { artistsQueryOptions, useAllUserArtists, useNewArtists };

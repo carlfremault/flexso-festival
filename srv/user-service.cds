@@ -1,6 +1,13 @@
 using {festival} from '../db/schema';
 using {ArtistsWithBookings} from './shared-projections';
 
+type SearchedArtist {
+    deezerId : Integer;
+    name     : String;
+    imageUrl : String;
+    nbFans   : Integer;
+}
+
 service UserService @(odata: '/user') {
     entity Events    as projection on festival.Events;
 
@@ -23,11 +30,6 @@ service UserService @(odata: '/user') {
         familyName : String;
     };
 
-    function searchArtists(searchString: String @mandatory ) returns array of {
-        deezerId : Integer;
-        name     : String;
-        imageUrl : String;
-        nbFans   : Integer;
-    };
+    function searchArtists(searchString: String @mandatory ) returns array of SearchedArtist;
 
 }
