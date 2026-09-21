@@ -15,16 +15,17 @@ export function ArtistDeleteDialog(props: ArtistDeleteDialogProps) {
   const { open, deleteTarget, onClose } = props;
 
   const { showToast } = useToast();
-  const { mutate: deleteArtist, isPending, error: deleteError, reset } = useDeleteArtist();
 
-  const handleSuccess = () => {
-    showToast("Artist removed!");
-    onClose();
-  };
+  const { mutate: deleteArtist, isPending, error: deleteError, reset } = useDeleteArtist();
 
   const handleDeleteArtist = () => {
     if (!deleteTarget) return;
     deleteArtist(deleteTarget.ID, { onSuccess: handleSuccess });
+  };
+
+  const handleSuccess = () => {
+    showToast("Artist removed!");
+    onClose();
   };
 
   const handleClose = () => {
