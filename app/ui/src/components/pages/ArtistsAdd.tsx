@@ -1,26 +1,87 @@
-import { useState } from "react";
-import { Button, FlexBox, MessageStrip, Panel, Search } from "@ui5/webcomponents-react";
+import { useMemo, useState } from "react";
+import { Button, FlexBox, MessageStrip, Panel, Search, Tag } from "@ui5/webcomponents-react";
 
 import ArtistGrid from "@/features/artists/components/ArtistGrid";
 import type { SearchResultArtist } from "@/features/artists/types";
-import { useNewArtists } from "@/features/artists/userQueries";
+import {
+  useAllUserArtists,
+  useCreateArtist,
+  useSearchedArtists,
+} from "@/features/artists/userQueries";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 
 import PageWrapper from "../layout/PageWrapper";
+import { useToast } from "../layout/Toast";
 
 import "@ui5/webcomponents-icons/dist/heart-2.js";
 
 export default function ArtistsAdd() {
   const [searchString, setSearchString] = useState<string>("");
 
-  const { data: artists, isError } = useNewArtists(useDebouncedValue(searchString));
+  const { data: persistedArtists } = useAllUserArtists();
+  const { data: searchedArtists, error: searchError } = useSearchedArtists(
+    useDebouncedValue(searchString),
+  );
 
-  // TODO
+  const persistedByDeezerId = useMemo(
+    () => new Map(persistedArtists.map((a) => [a.deezerId, a])),
+    [persistedArtists],
+  );
+
+  const artists = useMemo(
+    () =>
+      searchedArtists?.map((artist) => {
+        const persisted = persistedByDeezerId.get(artist.deezerId);
+        return persisted ? { ...artist, ...persisted } : artist;
+      }),
+    [searchedArtists, persistedByDeezerId],
+  );
+
+  const {
+    mutate: addArtist,
+    error: addArtistError,
+    reset,
+    isPending,
+    variables,
+  } = useCreateArtist();
+
+  const { showToast } = useToast();
+
   const handleAddArtist = (artist: SearchResultArtist) => {
-    console.log("adding Artist", artist.name);
+    reset();
+
+    const payload = {
+      deezerId: artist.deezerId,
+      name: artist.name,
+      imageUrl: artist.imageUrl,
+      nbFans: artist.nbFans,
+    };
+
+    addArtist(payload, {
+      onSuccess: () => showToast("Suggestion added!"),
+    });
   };
 
   const getRowKey = (artist: SearchResultArtist) => artist.deezerId.toString();
+
+  const renderAction = (artist: SearchResultArtist) => {
+    const alreadySuggested = persistedByDeezerId.get(artist.deezerId);
+
+    if (alreadySuggested) {
+      return <Tag design="Positive">Already suggested</Tag>;
+    } else {
+      return (
+        <Button
+          icon="heart-2"
+          design="Transparent"
+          accessibleName={`Add artist ${artist.name}`}
+          onClick={() => handleAddArtist(artist)}
+          disabled={isPending && variables?.deezerId === artist.deezerId}
+          tooltip="Add artist to suggestion list"
+        />
+      );
+    }
+  };
 
   return (
     <PageWrapper title="Suggest Artists" backTo="/artists">
@@ -32,24 +93,13 @@ export default function ArtistsAdd() {
             showClearIcon
           />
         </Panel>
-        {isError && (
+        {(searchError ?? addArtistError) && (
           <MessageStrip design="Negative" role="alert" hideCloseButton>
-            Failed to load artists
+            {(searchError ?? addArtistError)!.message}
           </MessageStrip>
         )}
         {artists && (
-          <ArtistGrid
-            artists={artists}
-            getRowKey={getRowKey}
-            renderAction={(artist) => (
-              <Button
-                icon="heart-2"
-                design="Transparent"
-                accessibleName={`Add artist ${artist.name}`}
-                onClick={() => handleAddArtist(artist)}
-              />
-            )}
-          />
+          <ArtistGrid artists={artists} getRowKey={getRowKey} renderAction={renderAction} />
         )}
       </FlexBox>
     </PageWrapper>
