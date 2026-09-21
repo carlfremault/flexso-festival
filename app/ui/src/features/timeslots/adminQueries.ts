@@ -55,6 +55,7 @@ const useCreateTimeslot = () => {
     onSuccess: (_created, variables) => {
       queryClient.invalidateQueries({ queryKey: ["admin", "timeslots", variables.event_ID] });
       queryClient.invalidateQueries({ queryKey: ["admin", "events"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "artists"] });
     },
   });
 };
@@ -91,6 +92,7 @@ const useUpdateTimeslot = () => {
     onSuccess: (_updated, variables) => {
       queryClient.invalidateQueries({ queryKey: ["admin", "timeslots", variables.eventId] });
       queryClient.invalidateQueries({ queryKey: ["admin", "events"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "artists"] });
     },
   });
 };
@@ -116,6 +118,7 @@ const useDeleteTimeslot = () => {
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["admin", "timeslots", variables.eventId] });
       queryClient.invalidateQueries({ queryKey: ["admin", "events"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "artists"] });
     },
   });
 };
