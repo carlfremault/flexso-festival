@@ -3,8 +3,8 @@ import cds from "@sap/cds";
 type DeezerArtist = {
   id: number;
   name: string;
-  picture_small: string;
-  nb_fan: number;
+  picture_small?: string;
+  nb_fan?: number;
 };
 
 type SearchArtistRequest = {
@@ -39,11 +39,13 @@ export class DeezerConnection {
       throw new Error("Unexpected response from Deezer");
     }
 
-    return deezerResponse.data.map((artist: DeezerArtist) => ({
-      deezerId: artist.id,
-      name: artist.name,
-      imageUrl: artist.picture_small,
-      nbFans: artist.nb_fan,
-    }));
+    return deezerResponse.data
+      .map((artist: DeezerArtist) => ({
+        deezerId: artist.id,
+        name: artist.name,
+        imageUrl: artist.picture_small,
+        nbFans: artist.nb_fan ?? 0,
+      }))
+      .sort((a, b) => b.nbFans - a.nbFans);
   }
 }

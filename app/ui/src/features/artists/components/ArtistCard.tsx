@@ -4,18 +4,18 @@ import { Avatar, Card, CardHeader, Text } from "@ui5/webcomponents-react";
 import { formatDate } from "@/utils/dateTimeUtils";
 import { formatNumber } from "@/utils/stringUtils";
 
-import type { PersistedArtist } from "../types";
+import type { ArtistCardArtist } from "../types";
 
 import { ArtistBookingTag } from "./ArtistBookingTag";
 
 import "./ArtistCard.css";
 
-interface ArtistCardProps {
-  artist: PersistedArtist;
-  renderAction?: (artist: PersistedArtist) => React.ReactElement;
+interface ArtistCardProps<T extends ArtistCardArtist> {
+  artist: T;
+  renderAction?: (artist: T) => React.ReactElement;
 }
 
-export default function ArtistCard(props: ArtistCardProps) {
+export default function ArtistCard<T extends ArtistCardArtist>(props: ArtistCardProps<T>) {
   const { artist, renderAction } = props;
 
   const rows = [

@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router";
-import { Grid, Toolbar, ToolbarButton } from "@ui5/webcomponents-react";
+import { Toolbar, ToolbarButton } from "@ui5/webcomponents-react";
 
-import ArtistCard from "@/features/artists/components/ArtistCard";
+import ArtistGrid from "@/features/artists/components/ArtistGrid";
+import type { PersistedArtist } from "@/features/artists/types";
 import { useAllUserArtists } from "@/features/artists/userQueries";
 
 import PageWrapper from "../layout/PageWrapper";
@@ -14,6 +15,8 @@ export default function ArtistsOverviewUsers() {
 
   const { data: artists } = useAllUserArtists();
 
+  const getRowKey = (artist: PersistedArtist) => artist.ID;
+
   return (
     <PageWrapper
       title="Artist suggestions"
@@ -23,16 +26,7 @@ export default function ArtistsOverviewUsers() {
         </Toolbar>
       }
     >
-      <Grid
-        defaultIndent="XL0 L0 M0 S0"
-        defaultSpan="XL4 L4 M12 S12"
-        hSpacing="1rem"
-        vSpacing="1rem"
-      >
-        {artists.map((artist) => (
-          <ArtistCard key={artist.ID} artist={artist} />
-        ))}
-      </Grid>
+      <ArtistGrid artists={artists} getRowKey={getRowKey} />
     </PageWrapper>
   );
 }
