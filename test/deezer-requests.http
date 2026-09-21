@@ -1,0 +1,4 @@
+###
+GET http://localhost:4004/user/searchArtists(searchString='royksopp')
+Authorization: Basic alice:
+

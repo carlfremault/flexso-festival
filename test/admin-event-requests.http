@@ -1,0 +1,33 @@
+# ADMIN SERVICE
+
+### Events
+GET http://localhost:4004/admin/Events?$expand=timeslots
+
+###
+GET http://localhost:4004/admin/Events/1ba7b810-9dad-11d1-80b4-00c04fd430c8?$expand=timeslots
+Authorization: Basic alice:
+
+###
+POST http://localhost:4004/admin/Events
+Content-Type: application/json
+
+{
+    "name": "New Event",
+    "startDate": "2020-01-01",
+    "endDate": "2020-01-02"
+}
+
+###
+PATCH http://localhost:4004/admin/Events(cf96d4d0-f1e1-4b80-ba90-ddad0c32676e)
+Content-Type: application/json
+
+{
+    "name": "Newer Event",
+    "startDate": "2020-01-01",
+    "endDate": "2020-01-02",
+    "notes": "tbc"
+}
+
+###
+DELETE http://localhost:4004/admin/Events(eed460e6-25d4-480d-983a-a2ad12bda552)
+

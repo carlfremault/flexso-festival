@@ -1,0 +1,25 @@
+# ADMIN SERVICE
+
+### Availabilities
+GET http://localhost:4004/admin/Availabilities
+
+###
+POST http://localhost:4004/admin/Availabilities
+Content-Type: application/json
+
+{
+   "date": "2024-04-12",
+    "status": "available",
+    "artist_ID": "1"
+}
+
+###
+PATCH http://localhost:4004/admin/Availabilities(8ae867e3-f127-42e2-b366-6b16ef56190f)
+Content-Type: application/json
+
+{
+    "status": "unavailable"
+}
+###
+DELETE http://localhost:4004/admin/Availabilities(8ae867e3-f127-42e2-b366-6b16ef56190f)
+

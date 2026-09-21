@@ -6,6 +6,8 @@ gen/
 .cdsrc-private.json
 default-*.json
 *.sqlite
+*.sqlite-shm
+*.sqlite-wal
 
 # MTA
 mta_archives/
@@ -17,3 +19,9 @@ mta_archives/
 
 # @cap-js/cds-typer
 @cds-models
+
+# Production test file (which has production url)
+test/production.http
+
+# ui build
+app/ui/dist

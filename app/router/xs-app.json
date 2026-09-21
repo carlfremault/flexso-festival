@@ -1,0 +1,34 @@
+{
+  "welcomeFile": "/ui/index.html",
+  "logout": {
+    "logoutEndpoint": "/logout",
+    "logoutPage": "/logged-out.html"
+  },
+  "authenticationMethod": "route",
+  "routes": [
+    {
+      "source": "^/ui/(.*\\..*)$",
+      "target": "/flexsofestival/$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa"
+    },
+    {
+      "source": "^/ui(/.*)?$",
+      "target": "/flexsofestival/index.html",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa"
+    },
+    {
+      "source": "^/logged-out.html$",
+      "localDir": "resources",
+      "authenticationType": "none"
+    },
+    {
+      "source": "^/(.*)$",
+      "target": "$1",
+      "destination": "srv-api",
+      "authenticationType": "xsuaa",
+      "csrfProtection": true
+    }
+  ]
+}
