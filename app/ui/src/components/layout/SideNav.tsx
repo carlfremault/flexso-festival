@@ -3,12 +3,8 @@ import { SideNavigation, SideNavigationItem } from "@ui5/webcomponents-react";
 
 import { createNavClickHandler, toHref } from "@/utils/routerUtils";
 
-import { useUser } from "./UserProvider";
-
 export default function SideNav() {
   const navigate = useNavigate();
-
-  const { isAdmin } = useUser();
 
   const eventsMatch = useMatch("/events/*");
   const artistsMatch = useMatch("/artists/*");
@@ -25,15 +21,14 @@ export default function SideNav() {
         icon="business-suite/event"
         text="Events"
       />
-      {isAdmin && (
-        <SideNavigationItem
-          href={toHref("/artists")}
-          onClick={handleArtistsClick}
-          selected={!!artistsMatch}
-          icon="palette"
-          text="Artists"
-        />
-      )}
+
+      <SideNavigationItem
+        href={toHref("/artists")}
+        onClick={handleArtistsClick}
+        selected={!!artistsMatch}
+        icon="palette"
+        text="Artists"
+      />
     </SideNavigation>
   );
 }

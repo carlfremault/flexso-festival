@@ -1,4 +1,5 @@
 using {festival} from '../db/schema';
+using {ArtistsWithBookings} from './shared-projections';
 
 service UserService @(odata: '/user') {
     entity Events    as projection on festival.Events;
@@ -9,9 +10,10 @@ service UserService @(odata: '/user') {
                             and date <= event.endDate;
 
     entity Artists   as
-        projection on festival.Artists
+        projection on ArtistsWithBookings
         excluding {
-            availabilities
+            availabilities,
+            timeslots
         };
 
     function whoami()                                        returns {

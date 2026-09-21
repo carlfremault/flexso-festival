@@ -31,8 +31,8 @@ entity Timeslots : cuid, managed {
 }
 
 entity Artists : cuid, managed {
-    deezerId       : Integer;
-    name           : String;
+    deezerId       : Integer not null;
+    name           : String not null;
     imageUrl       : String;
     nbFans         : Integer;
     timeslots      : Association to many Timeslots

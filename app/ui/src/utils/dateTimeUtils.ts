@@ -1,5 +1,8 @@
 import type { Event, Timeslot } from "#cds-models/AdminService";
 
+export type CdsDate = NonNullable<Event["startDate"]>;
+export type CdsTime = NonNullable<Timeslot["startTime"]>;
+
 // ----------------------------------------------------------
 // Build a human-readable date range or date following locale
 // e.g. 16-17 September 2026, 16 September - 2 October 2026
@@ -12,19 +15,23 @@ const formatter = new Intl.DateTimeFormat(locales, {
   day: "numeric",
 });
 
-export function formatDateRange(start: Date, end: Date) {
-  return formatter.formatRange(new Date(start), new Date(end));
+function toLocalDate(date: CdsDate) {
+  const [year, month, day] = date.split("-").map(Number);
+  return new Date(year, month - 1, day);
 }
 
-export function formatDate(date: Date) {
-  return formatter.format(new Date(date));
+export function formatDate(date: CdsDate) {
+  return formatter.format(toLocalDate(date));
+}
+
+export function formatDateRange(start: CdsDate, end: CdsDate) {
+  return formatter.formatRange(toLocalDate(start), toLocalDate(end));
 }
 
 // ------------------------------------------------------
 // Check date for CDS format string before API submission
 // "YYYY-MM-DD"
 // ------------------------------------------------------
-export type CdsDate = NonNullable<Event["startDate"]>;
 
 export function isCdsDate(value: string): value is CdsDate {
   return /^\d{4}-\d{2}-\d{2}$/.test(value);
@@ -34,7 +41,6 @@ export function isCdsDate(value: string): value is CdsDate {
 // Check time for CDS format string before API submission
 // "HH:mm:ss"
 // ------------------------------------------------------
-export type CdsTime = NonNullable<Timeslot["startTime"]>;
 
 export function isCdsTime(value: string): value is CdsTime {
   return /^\d{2}:\d{2}:\d{2}$/.test(value);

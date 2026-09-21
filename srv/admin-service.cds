@@ -1,4 +1,5 @@
 using {festival} from '../db/schema';
+using {ArtistsWithBookings} from './shared-projections';
 
 service AdminService @(odata: '/admin') {
     entity Events         as projection on festival.Events;
@@ -14,6 +15,13 @@ service AdminService @(odata: '/admin') {
             end as needsRescheduling : Boolean
         };
 
-    entity Artists        as projection on festival.Artists;
+
+    entity Artists        as
+        projection on ArtistsWithBookings
+        excluding {
+            availabilities,
+            timeslots
+        };
+
     entity Availabilities as projection on festival.Availabilities;
 }
