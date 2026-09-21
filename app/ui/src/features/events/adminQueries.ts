@@ -110,6 +110,7 @@ const useUpdateEvent = () => {
     onSuccess: (_updated, variables) => {
       queryClient.invalidateQueries({ queryKey: ["admin", "events"] });
       queryClient.invalidateQueries({ queryKey: ["admin", "timeslots", variables.id] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "artists"] });
     },
   });
 };
@@ -132,8 +133,10 @@ const useDeleteEvent = () => {
 
   return useMutation({
     mutationFn: deleteEvent,
-    onSuccess: () => {
+    onSuccess: (_deleted, variables) => {
       queryClient.invalidateQueries({ queryKey: ["admin", "events"] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "timeslots", variables] });
+      queryClient.invalidateQueries({ queryKey: ["admin", "artists"] });
     },
   });
 };
